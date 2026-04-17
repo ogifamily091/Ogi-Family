@@ -448,7 +448,10 @@ var bootstrapPromise = null;
 // ==================== CACHE ====================
 var CACHE_KEY = 'ogi_menu_catalog_v1';
 var CACHE_TIME_KEY = 'ogi_menu_catalog_time_v1';
+var CACHE_VERSION_KEY = 'ogi_menu_catalog_version_v1';
 var CACHE_DURATION = 30 * 60 * 1000;
+var CACHE_SCHEMA_VERSION = 'menu-active-only-v2';
+var CACHE_FALLBACK_DELAY = 1200;
 
 function hasAppsScriptRuntime() {
   return !!(window.google && google.script && google.script.run);
@@ -582,13 +585,15 @@ function updateOrderStatusRequest(orderId, newStatus) {
 
 function getCachedMenuCatalog() {
   try {
+    if (localStorage.getItem(CACHE_VERSION_KEY) !== CACHE_SCHEMA_VERSION) {
+      clearMenuCatalogCache();
+      return null;
+    }
     var t = localStorage.getItem(CACHE_TIME_KEY);
     if (t && (Date.now() - parseInt(t)) < CACHE_DURATION) {
       var d = localStorage.getItem(CACHE_KEY);
       if (d) {
-        var parsed = JSON.parse(d);
-        if (Array.isArray(parsed)) return { menuItems: parsed, categories: DEFAULT_CATEGORIES };
-        if (parsed && parsed.menuItems && parsed.categories) return parsed;
+        return sanitizeMenuCatalog(JSON.parse(d));
       }
     }
   } catch(e) {}
@@ -597,9 +602,52 @@ function getCachedMenuCatalog() {
 
 function saveMenuCatalogToCache(data) {
   try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    localStorage.setItem(CACHE_KEY, JSON.stringify(sanitizeMenuCatalog(data)));
     localStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
+    localStorage.setItem(CACHE_VERSION_KEY, CACHE_SCHEMA_VERSION);
   } catch(e) {}
+}
+
+function clearMenuCatalogCache() {
+  try {
+    localStorage.removeItem(CACHE_KEY);
+    localStorage.removeItem(CACHE_TIME_KEY);
+    localStorage.removeItem(CACHE_VERSION_KEY);
+  } catch (e) {}
+}
+
+function sanitizeMenuCatalog(catalog) {
+  var safeCatalog = catalog || {};
+  var categories = Array.isArray(safeCatalog.categories) ? safeCatalog.categories : DEFAULT_CATEGORIES.slice();
+  var menuItems = Array.isArray(safeCatalog.menuItems) ? safeCatalog.menuItems : [];
+  var activeCategories = categories
+    .filter(function(category) { return category && category.active !== false; })
+    .map(function(category) {
+      return {
+        id: category.id || '',
+        slug: String(category.slug || ''),
+        name: category.name || category.slug || '',
+        icon: category.icon || '🍽️',
+        active: category.active !== false,
+        sortOrder: category.sortOrder || 0
+      };
+    });
+  var allowedCategoryMap = {};
+  activeCategories.forEach(function(category) {
+    allowedCategoryMap[category.slug] = true;
+  });
+  var activeMenuItems = menuItems
+    .filter(function(item) {
+      return item && item.active !== false && allowedCategoryMap[item.category];
+    })
+    .map(function(item) {
+      return item;
+    });
+
+  return {
+    categories: activeCategories,
+    menuItems: activeMenuItems
+  };
 }
 
 var DEFAULT_CATEGORIES = [
@@ -934,18 +982,37 @@ function getDefaultMenuCatalog() {
 
 function loadMenu() {
   var cached = getCachedMenuCatalog();
-  renderMenuCatalog(cached || getDefaultMenuCatalog());
+  var fallbackTimer = null;
+  if (cached) {
+    fallbackTimer = setTimeout(function() {
+      renderMenuCatalog(cached);
+    }, CACHE_FALLBACK_DELAY);
+  }
   loadPublicBootstrapData()
     .then(function(r) {
+      if (fallbackTimer) {
+        clearTimeout(fallbackTimer);
+        fallbackTimer = null;
+      }
       if (!r || !r.success || !r.data) return;
       if (r.data.feeSettings) feeSettings = r.data.feeSettings;
       if (r.data.menuCatalog) {
-        saveMenuCatalogToCache(r.data.menuCatalog);
-        renderMenuCatalog(r.data.menuCatalog);
+        var liveCatalog = sanitizeMenuCatalog(r.data.menuCatalog);
+        saveMenuCatalogToCache(liveCatalog);
+        renderMenuCatalog(liveCatalog);
       }
       updateCartUI();
     })
     .catch(function(err) {
+      if (fallbackTimer) {
+        clearTimeout(fallbackTimer);
+        fallbackTimer = null;
+      }
+      if (cached) {
+        renderMenuCatalog(cached);
+      } else {
+        renderMenuCatalog(getDefaultMenuCatalog());
+      }
       console.warn('Gagal memuat bootstrap publik:', err);
     });
 }
