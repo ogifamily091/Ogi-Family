@@ -6,9 +6,11 @@
   <title>Ogi Family - Kuliner Khas Bugis Sulawesi Selatan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://script.google.com">
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+  <link rel="preconnect" href="https://app.midtrans.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Midtrans deferred - tidak blokir render -->
-  <script src="https://app.midtrans.com/snap/snap.js" data-client-key="Mid-client-_30W1GrONhNZIKe3" defer></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -438,11 +440,15 @@ var activeCategoryId = null;
 var menuLookup = {};
 var APP_CONFIG = window.OGI_APP_CONFIG || {};
 var API_BASE_URL = String(APP_CONFIG.apiBaseUrl || '').trim();
+var MIDTRANS_CLIENT_KEY = 'Mid-client-_30W1GrONhNZIKe3';
+var SNAP_SCRIPT_SRC = 'https://app.midtrans.com/snap/snap.js';
+var snapScriptPromise = null;
+var bootstrapPromise = null;
 
 // ==================== CACHE ====================
 var CACHE_KEY = 'ogi_menu_catalog_v1';
 var CACHE_TIME_KEY = 'ogi_menu_catalog_time_v1';
-var CACHE_DURATION = 5 * 60 * 1000;
+var CACHE_DURATION = 30 * 60 * 1000;
 
 function hasAppsScriptRuntime() {
   return !!(window.google && google.script && google.script.run);
@@ -497,28 +503,66 @@ function fetchApiGet(action, params) {
 }
 
 function fetchApiPost(action, data) {
+  var body = new URLSearchParams();
+  body.set('payload', JSON.stringify(data || {}));
   return fetch(buildApiUrl(action), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data || {})
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    body: body.toString()
   }).then(parseApiJsonResponse);
 }
 
 function loadPublicBootstrapData() {
-  if (shouldUseExternalApi()) return fetchApiGet('bootstrap');
-  if (!hasAppsScriptRuntime()) return Promise.reject(new Error('API publik belum dikonfigurasi'));
-  return Promise.all([
-    callServerFunction('getMenuCatalog'),
-    callServerFunction('getFeeSettings')
-  ]).then(function(results) {
-    return {
-      success: true,
-      data: {
-        menuCatalog: results[0] && results[0].data ? results[0].data : null,
-        feeSettings: results[1] && results[1].data ? results[1].data : null
-      }
-    };
+  if (bootstrapPromise) return bootstrapPromise;
+  if (shouldUseExternalApi()) {
+    bootstrapPromise = fetchApiGet('bootstrap');
+  } else if (!hasAppsScriptRuntime()) {
+    bootstrapPromise = Promise.reject(new Error('API publik belum dikonfigurasi'));
+  } else {
+    bootstrapPromise = Promise.all([
+      callServerFunction('getMenuCatalog'),
+      callServerFunction('getFeeSettings')
+    ]).then(function(results) {
+      return {
+        success: true,
+        data: {
+          menuCatalog: results[0] && results[0].data ? results[0].data : null,
+          feeSettings: results[1] && results[1].data ? results[1].data : null
+        }
+      };
+    });
+  }
+  bootstrapPromise = bootstrapPromise.catch(function(err) {
+    bootstrapPromise = null;
+    throw err;
   });
+  return bootstrapPromise;
+}
+
+function ensureSnapLoaded() {
+  if (window.snap && typeof window.snap.pay === 'function') return Promise.resolve(window.snap);
+  if (snapScriptPromise) return snapScriptPromise;
+  snapScriptPromise = new Promise(function(resolve, reject) {
+    var existing = document.querySelector('script[data-midtrans-snap="true"]');
+    if (existing) {
+      existing.addEventListener('load', function() { resolve(window.snap); }, { once: true });
+      existing.addEventListener('error', function() { reject(new Error('Gagal memuat Midtrans Snap')); }, { once: true });
+      return;
+    }
+    var script = document.createElement('script');
+    script.src = SNAP_SCRIPT_SRC;
+    script.defer = true;
+    script.dataset.clientKey = MIDTRANS_CLIENT_KEY;
+    script.setAttribute('data-client-key', MIDTRANS_CLIENT_KEY);
+    script.setAttribute('data-midtrans-snap', 'true');
+    script.onload = function() { resolve(window.snap); };
+    script.onerror = function() { reject(new Error('Gagal memuat Midtrans Snap')); };
+    document.head.appendChild(script);
+  }).catch(function(err) {
+    snapScriptPromise = null;
+    throw err;
+  });
+  return snapScriptPromise;
 }
 
 function saveOrderRequest(orderData) {
@@ -891,21 +935,19 @@ function getDefaultMenuCatalog() {
 function loadMenu() {
   var cached = getCachedMenuCatalog();
   renderMenuCatalog(cached || getDefaultMenuCatalog());
-  setTimeout(function() {
-    loadPublicBootstrapData()
-      .then(function(r) {
-        if (!r || !r.success || !r.data) return;
-        if (r.data.feeSettings) feeSettings = r.data.feeSettings;
-        if (r.data.menuCatalog) {
-          saveMenuCatalogToCache(r.data.menuCatalog);
-          renderMenuCatalog(r.data.menuCatalog);
-        }
-        updateCartUI();
-      })
-      .catch(function(err) {
-        console.warn('Gagal memuat bootstrap publik:', err);
-      });
-  }, 200);
+  loadPublicBootstrapData()
+    .then(function(r) {
+      if (!r || !r.success || !r.data) return;
+      if (r.data.feeSettings) feeSettings = r.data.feeSettings;
+      if (r.data.menuCatalog) {
+        saveMenuCatalogToCache(r.data.menuCatalog);
+        renderMenuCatalog(r.data.menuCatalog);
+      }
+      updateCartUI();
+    })
+    .catch(function(err) {
+      console.warn('Gagal memuat bootstrap publik:', err);
+    });
 }
 
 function escName(n) { return String(n || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
@@ -1239,7 +1281,10 @@ function processQrisMidtrans() {
   currentOrderData.paymentMethod = 'QRIS';
   currentOrderData.paymentStatus = 'Menunggu Pembayaran';
   currentOrderData.proofUrl = '';
-  saveOrderRequest(currentOrderData)
+  ensureSnapLoaded()
+    .then(function() {
+      return saveOrderRequest(currentOrderData);
+    })
     .then(function(r) {
       if (r.success) { currentOrderData.orderId = r.orderId; createMidtransPayment(); }
       else { hideProcessing(); showToast('Gagal menyimpan: ' + (r.error||'')); }
