@@ -1,4 +1,4 @@
 window.OGI_APP_CONFIG = {
-  apiBaseUrl: "https://admin.ogifamily.my.id",
+  apiBaseUrl: "https://api.ogifamily.my.id",
   credentials: "omit"
 };
