@@ -6,11 +6,9 @@
   <title>Ogi Family - Kuliner Khas Bugis Sulawesi Selatan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://script.google.com">
-  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
-  <link rel="preconnect" href="https://app.midtrans.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Midtrans deferred - tidak blokir render -->
+  <script src="https://app.midtrans.com/snap/snap.js" data-client-key="Mid-client-_30W1GrONhNZIKe3" defer></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -20,6 +18,39 @@
     /* Hero */
     .hero{padding:0;position:relative;overflow:hidden}
     .food-image{width:100%;height:auto;display:block;object-fit:cover;max-height:280px}
+
+    /* Favorite Section */
+    .favorite-section{position:relative;overflow:hidden;padding:26px 16px;background:linear-gradient(135deg,#4b2f1f 0%,#7a4a1f 52%,#c96c1a 100%);color:white}
+    .favorite-section:before{content:'';position:absolute;inset:auto -60px -80px auto;width:220px;height:220px;border-radius:50%;background:rgba(255,215,0,0.14);filter:blur(10px)}
+    .favorite-header{position:relative;z-index:1;margin-bottom:18px}
+    .favorite-kicker{display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,0.16);font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px}
+    .favorite-title{font-family:'Playfair Display',serif;font-size:1.65rem;line-height:1.15;margin-bottom:6px}
+    .favorite-subtitle{color:rgba(255,248,230,0.88);font-size:0.9rem;max-width:520px}
+    .favorite-grid{position:relative;z-index:1}
+    .favorite-slider{position:relative;overflow:hidden}
+    .favorite-track{display:flex;transition:transform .35s ease;will-change:transform}
+    .favorite-slide{flex:0 0 100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .favorite-card{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:14px;border-radius:16px;background:rgba(255,255,255,0.12);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.12);box-shadow:0 10px 24px rgba(0,0,0,0.14);min-height:100%}
+    .favorite-rank{width:32px;height:32px;border-radius:50%;background:#ffd700;color:#5c4033;font-size:0.9rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .favorite-main{display:flex;gap:12px;align-items:center;min-width:0}
+    .favorite-media{width:58px;height:58px;border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .favorite-media img{width:100%;height:100%;object-fit:cover;display:block}
+    .favorite-icon{font-size:1.7rem;line-height:1}
+    .favorite-info{min-width:0}
+    .favorite-name{font-weight:700;font-size:0.95rem;line-height:1.3;margin-bottom:2px}
+    .favorite-meta{color:rgba(255,244,225,0.84);font-size:0.76rem;line-height:1.4}
+    .favorite-price{font-weight:700;color:#ffe082;font-size:0.82rem;margin-top:4px}
+    .favorite-sales{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;white-space:nowrap;padding-top:8px;border-top:1px solid rgba(255,255,255,0.12)}
+    .favorite-sales strong{font-size:1.15rem;color:#fff7dc}
+    .favorite-sales span{font-size:0.74rem;color:rgba(255,244,225,0.84)}
+    .favorite-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+    .favorite-nav{display:flex;align-items:center;gap:8px}
+    .favorite-nav-btn{width:36px;height:36px;border:none;border-radius:50%;background:rgba(255,255,255,0.18);color:white;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .favorite-nav-btn:active{transform:scale(.96)}
+    .favorite-dots{display:flex;align-items:center;gap:6px;justify-content:flex-end;flex:1}
+    .favorite-dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,0.32);transition:all .25s ease}
+    .favorite-dot.active{width:20px;background:#ffd700}
+    .favorite-empty-state{text-align:center;padding:18px 16px;border-radius:16px;background:rgba(255,255,255,0.1);color:rgba(255,248,230,0.88);font-size:0.9rem}
 
     /* Menu Section */
     .menu-section{background:linear-gradient(180deg,#f5efe3 0%,#e8dcc8 100%);padding:28px 16px}
@@ -82,25 +113,24 @@
     .cart-item-info{min-width:0}
     .cart-item-name{font-weight:600;font-size:0.9rem;color:#3d2a1a}
     .cart-item-price{color:#e65c00;font-weight:600;font-size:0.85rem}
-    .cart-item-note{margin-top:6px}
+    .cart-item-note{margin-top:8px}
     .cart-field-label{display:block;font-size:0.72rem;color:#8b7355;margin-bottom:4px;font-weight:600}
     .cart-item-note select{width:100%;padding:6px 10px;border:1px solid #d4c4a8;border-radius:6px;font-size:0.8rem;font-family:'Poppins',sans-serif;background:#faf8f5;color:#3d2a1a}
     .cart-item-note select:focus{outline:none;border-color:#5c4033;background:white}
     .cart-item-note select:disabled{color:#8b7355;cursor:not-allowed}
-    .cart-variant-list{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-    .cart-variant-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid #e8dcc8;border-radius:8px;background:#faf8f5}
-    .cart-variant-main{min-width:0}
+    .cart-variant-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:6px}
+    .cart-variant-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #e8dcc8;border-radius:8px;background:#faf8f5;min-height:62px}
+    .cart-variant-main{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;flex:1}
     .cart-variant-name{font-size:0.8rem;font-weight:600;color:#3d2a1a}
-    .cart-variant-price{font-size:0.72rem;color:#8b7355;margin-top:2px}
-    .cart-variant-controls{display:flex;align-items:center;justify-content:flex-end;gap:8px}
-    .cart-variant-qty-group,.cart-variant-subtotal{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
-    .cart-variant-meta-label{font-size:0.62rem;color:#8b7355;font-weight:600;line-height:1}
+    .cart-variant-price{font-size:0.72rem;color:#8b7355}
+    .cart-variant-controls{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-shrink:0}
+    .cart-variant-qty-group{display:flex;align-items:center;justify-content:center;gap:3px}
+    .cart-variant-meta-label{display:none}
     .cart-variant-stepper{display:flex;align-items:center;gap:6px;padding:4px;border:1px solid #d4c4a8;border-radius:999px;background:white;box-shadow:inset 0 1px 0 rgba(255,255,255,0.7)}
     .cart-variant-step-btn{width:28px;height:28px;border:none;border-radius:50%;background:#5c4033;color:white;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
     .cart-variant-step-btn:active{transform:scale(0.94);background:#3d2a1a}
     .cart-variant-step-btn:disabled{background:#ccbda4;color:#f8f4ec;cursor:not-allowed;transform:none}
     .cart-variant-step-value{min-width:24px;text-align:center;font-size:0.86rem;font-weight:700;color:#3d2a1a}
-    .cart-variant-subtotal{min-width:82px;padding:6px 8px;border:1px solid #e8dcc8;border-radius:7px;background:white;font-size:0.78rem;font-weight:600;color:#5c4033;line-height:1.2;text-align:center}
     .cart-variant-remaining{margin-top:8px;font-size:0.76rem;color:#cc5200;font-weight:600}
     .cart-variant-ready{margin-top:8px;font-size:0.76rem;color:#228b22;font-weight:600}
     .cart-item-qty{display:flex;align-items:center;gap:8px}
@@ -129,14 +159,26 @@
     .checkout-btn svg{width:22px;height:22px;fill:white}
 
     /* Customer Info */
-    .customer-info{padding:14px 16px;background:#f9f6f0;border-bottom:1px solid #e8dcc8;flex-shrink:0}
-    .customer-info-title{font-weight:600;color:#5c4033;margin-bottom:10px;font-size:0.9rem}
+    .customer-info{padding:14px 16px;background:#f9f6f0;border-bottom:1px solid #e8dcc8;flex-shrink:0;display:flex;flex-direction:column;gap:12px}
+    .customer-info-header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .customer-info-header-main{min-width:0;flex:1;display:flex;flex-direction:column;gap:0}
+    .customer-info-title{font-weight:600;color:#5c4033;font-size:0.9rem}
+    .customer-info-summary{display:none}
+    .customer-summary-chip{display:inline-flex;flex-direction:column;gap:2px;padding:7px 10px;border-radius:10px;background:white;border:1px solid #e8dcc8;font-size:0.74rem;color:#5c4033;min-width:0;max-width:100%}
+    .customer-summary-chip strong{font-size:0.64rem;letter-spacing:0.03em;text-transform:uppercase;color:#8b7355}
+    .customer-summary-chip.warning{background:#fff7e8;border-color:#f0cf8b}
+    .customer-summary-hint{width:100%;font-size:0.74rem;color:#8b7355}
+    .customer-summary-hint.ready{color:#228b22}
+    .customer-info-form{display:flex;flex-direction:column;gap:10px}
     .customer-input-group{display:flex;flex-direction:column;gap:10px}
+    .customer-input-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
     .customer-input-field{display:flex;flex-direction:column;gap:3px}
+    .customer-input-field.full-width{grid-column:1/-1}
     .customer-input-field label{font-size:0.8rem;color:#5c4033;font-weight:500}
-    .customer-input-field input{padding:9px 12px;border:2px solid #d4c4a8;border-radius:8px;font-size:0.95rem;font-family:'Poppins',sans-serif;transition:border-color 0.2s}
-    .customer-input-field input:focus{outline:none;border-color:#5c4033}
-    .customer-input-field input.error{border-color:#cc0000}
+    .customer-input-field input,.customer-input-field select,.customer-input-field textarea{padding:9px 12px;border:2px solid #d4c4a8;border-radius:8px;font-size:0.95rem;font-family:'Poppins',sans-serif;transition:border-color 0.2s;background:#fff;color:#3d2a1a}
+    .customer-input-field textarea{resize:vertical;min-height:72px}
+    .customer-input-field input:focus,.customer-input-field select:focus,.customer-input-field textarea:focus{outline:none;border-color:#5c4033}
+    .customer-input-field input.error,.customer-input-field select.error,.customer-input-field textarea.error{border-color:#cc0000}
     .input-error-msg{color:#cc0000;font-size:0.75rem;display:none}
     .input-error-msg.show{display:block}
 
@@ -148,6 +190,9 @@
     .history-modal-header{padding:18px 20px;border-bottom:1px solid #d4c4a8;display:flex;align-items:center;justify-content:space-between}
     .history-modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#5c4033}
     .history-modal-close{background:none;border:none;font-size:1.5rem;color:#8b7355;cursor:pointer}
+    .history-filter-bar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px 0}
+    .history-filter-btn{border:none;border-radius:999px;background:#ebe1d2;color:#5c4033;padding:7px 12px;font-size:0.76rem;font-weight:600;cursor:pointer}
+    .history-filter-btn.active{background:#5c4033;color:white}
     .history-modal-body{flex:1;overflow-y:auto;padding:16px}
     .history-empty{text-align:center;padding:40px 20px;color:#8b7355}
     .history-item{background:white;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
@@ -178,6 +223,7 @@
     .payment-body{padding:18px;overflow-y:auto;max-height:70vh}
     .payment-options{display:flex;flex-direction:column;gap:10px}
     .payment-option{display:flex;align-items:center;gap:14px;padding:14px;border:2px solid #d4c4a8;border-radius:12px;cursor:pointer;transition:all 0.2s;background:white}
+    .payment-option.disabled{opacity:0.55;background:#f4efe7;border-style:dashed}
     .payment-option.selected{border-color:#5c4033;background:#f9f6f0}
     .payment-option-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:white;flex-shrink:0}
     .payment-option-icon.cash{background:linear-gradient(135deg,#228b22,#32cd32)}
@@ -188,6 +234,7 @@
     .payment-option-radio{width:20px;height:20px;border:2px solid #d4c4a8;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
     .payment-option.selected .payment-option-radio{border-color:#5c4033}
     .payment-option.selected .payment-option-radio::after{content:'';width:11px;height:11px;background:#5c4033;border-radius:50%}
+    .payment-method-hint{display:none;margin-top:10px;padding:10px 12px;border-radius:10px;background:#fff4da;color:#8a5a00;font-size:0.82rem;font-weight:500}
     .payment-total-section{background:#f9f6f0;padding:14px;border-radius:12px;margin-bottom:18px}
     .confirm-payment-btn{width:100%;padding:13px;background:linear-gradient(180deg,#5c4033 0%,#3d2a1a 100%);color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;margin-top:14px}
     .confirm-payment-btn:disabled{background:#ccc;cursor:not-allowed}
@@ -224,21 +271,67 @@
     .social-handle{color:#f5efe3;font-size:0.75rem}
     .copyright{color:#8b7355;font-size:0.75rem;border-top:1px solid #5c4033;padding-top:14px;margin-top:14px}
 
-    @media(max-width:420px){
-      .menu-section,.catering,.footer{padding-left:14px;padding-right:14px}
-      .cart-body{padding:14px}
-      .cart-footer{padding:14px 16px}
-      .cart-item{gap:10px;padding:12px 0}
-      .cart-item-actions{align-items:flex-start}
-      .cart-item-actions-main{gap:8px}
-      .cart-variant-row{grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:7px 8px}
+    @media(max-width:768px){
+      .favorite-slide{gap:10px}
+      .favorite-card{padding:12px;gap:10px}
+      .favorite-main{gap:10px}
+      .favorite-media{width:50px;height:50px;border-radius:12px}
+      .favorite-name{font-size:.85rem}
+      .favorite-meta{font-size:.7rem}
+      .favorite-price{font-size:.76rem}
+      .favorite-sales strong{font-size:1rem}
+      .favorite-sales span{font-size:.68rem}
+      .favorite-controls{margin-top:12px}
+      .favorite-nav-btn{width:32px;height:32px;font-size:1rem}
+      .cart-modal{align-items:flex-end;padding:0}
+      .cart-content{max-width:none;max-height:100dvh;height:100dvh;border-radius:20px 20px 0 0}
+      .cart-header{padding:14px 16px}
+      .customer-info{padding:10px 12px;gap:8px}
+      .customer-input-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+      .customer-input-field label{font-size:0.76rem}
+      .customer-input-field input,.customer-input-field select,.customer-input-field textarea{padding:8px 10px;font-size:0.88rem}
+      .cart-body{padding:10px 12px}
+      .cart-footer{padding:10px 12px}
+      .cart-summary{margin-bottom:10px}
+      .cart-summary-row{padding:4px 0;font-size:0.85rem}
+      .cart-summary-row.total .cart-summary-label{font-size:0.95rem}
+      .cart-summary-row.total .cart-summary-value{font-size:1.08rem}
+      .cart-item{grid-template-columns:auto minmax(0,1fr) auto;gap:8px;padding:10px 0;align-items:flex-start}
+      .cart-item-icon{font-size:1.6rem}
+      .cart-item-actions{grid-column:3;grid-row:1;flex-direction:column;align-items:flex-end;justify-content:flex-start;padding-top:0;gap:8px}
+      .cart-item-actions-main{flex-direction:column;align-items:flex-end;gap:6px}
+      .cart-item-note{margin-top:6px}
+      .cart-field-label{font-size:0.68rem}
+      .cart-variant-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+      .cart-variant-row{gap:8px;padding:7px 8px;min-height:56px}
       .cart-variant-controls{gap:6px}
       .cart-variant-stepper{gap:4px;padding:3px}
-      .cart-variant-step-btn{width:26px;height:26px;font-size:0.95rem}
-      .cart-variant-step-value{min-width:20px;font-size:0.8rem}
-      .cart-variant-subtotal{min-width:72px;padding:6px 6px;font-size:0.73rem}
-      .cart-variant-name{font-size:0.77rem}
-      .cart-variant-price{font-size:0.68rem}
+      .cart-variant-step-btn{width:24px;height:24px;font-size:0.88rem}
+      .cart-variant-step-value{min-width:18px;font-size:0.78rem}
+      .cart-variant-name{font-size:0.76rem}
+      .cart-variant-price{font-size:0.66rem}
+      .cart-variant-remaining,.cart-variant-ready{margin-top:6px;font-size:0.72rem}
+      .checkout-btn{padding:11px;font-size:0.95rem}
+      .checkout-btn svg{width:20px;height:20px}
+    }
+
+    @media(max-width:420px){
+      .menu-section,.catering,.footer{padding-left:14px;padding-right:14px}
+      .favorite-section{padding:22px 14px}
+      .favorite-slide{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+      .favorite-card{padding:10px;gap:8px}
+      .favorite-main{gap:8px}
+      .favorite-media{width:44px;height:44px}
+      .favorite-rank{width:28px;height:28px;font-size:.78rem}
+      .favorite-name{font-size:.78rem}
+      .favorite-meta{font-size:.66rem}
+      .favorite-price{font-size:.72rem}
+      .favorite-sales{padding-top:6px}
+      .favorite-sales strong{font-size:.9rem}
+      .favorite-sales span{font-size:.64rem}
+      .customer-input-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .cart-body{padding:10px}
+      .cart-footer{padding:10px 12px}
     }
 
     @media(min-width:640px){
@@ -262,6 +355,7 @@
 
     @media(min-width:900px){
       .food-image{max-height:420px}
+      .favorite-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .menu-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
       .menu-item{padding:14px}
       .menu-item-image-container{width:88px;height:88px}
@@ -276,10 +370,12 @@
       .menu-grid{gap:8px}
       .menu-item{padding:10px}
       .category-tab{padding:7px 12px;font-size:0.8rem}
+      .customer-input-grid{grid-template-columns:1fr}
+      .cart-variant-list{grid-template-columns:1fr}
       .cart-variant-controls{flex-direction:column;align-items:stretch}
-      .cart-variant-qty-group,.cart-variant-subtotal{width:100%}
+      .cart-variant-row{align-items:stretch;flex-direction:column;min-height:0}
+      .cart-variant-controls,.cart-variant-qty-group{width:100%}
       .cart-variant-stepper{width:100%;justify-content:space-between}
-      .cart-variant-subtotal{min-width:0}
     }
   </style>
 </head>
@@ -287,6 +383,17 @@
 <div class="container">
   <section class="hero">
     <img src="https://lh3.googleusercontent.com/d/1YD05lGQ12wLCI2r94PUN6jJ_DYThx8mU" alt="Sajian Khas Bugis Ogi Family" class="food-image" loading="eager" fetchpriority="high">
+  </section>
+
+  <section class="favorite-section" id="favorite" hidden>
+    <div class="favorite-header">
+      <span class="favorite-kicker">Pilihan Pelanggan</span>
+      <h2 class="favorite-title">Menu Favorit</h2>
+      <p class="favorite-subtitle">Top 5 menu terlaris yang paling sering dipesan pelanggan Ogi Family.</p>
+    </div>
+    <div class="favorite-grid" id="favoriteMenuGrid">
+      <div class="favorite-empty-state">Sedang memuat menu favorit...</div>
+    </div>
   </section>
 
   <section class="menu-section" id="menu">
@@ -344,6 +451,7 @@
       <h3 class="history-modal-title">Histori Pesanan Anda</h3>
       <button class="history-modal-close" onclick="closeHistoryModal()">&times;</button>
     </div>
+    <div class="history-filter-bar" id="historyFilterBar"></div>
     <div class="history-modal-body" id="historyModalBody"></div>
   </div>
 </div>
@@ -356,17 +464,41 @@
       <button class="close-cart" onclick="closeCart()">&times;</button>
     </div>
     <div class="customer-info" id="customerInfo">
-      <div class="customer-info-title">Informasi Customer</div>
-      <div class="customer-input-group">
-        <div class="customer-input-field">
-          <label>Nomor Meja *</label>
-          <input type="text" id="nomorMeja" placeholder="Contoh: 1, 2, 3..." oninput="validateCustomerInfo()">
-          <span class="input-error-msg" id="nomorMejaError">Nomor meja wajib diisi</span>
+      <div class="customer-info-header-row">
+        <div class="customer-info-header-main">
+          <div class="customer-info-title">Informasi Customer</div>
+          <div class="customer-info-summary" id="customerInfoSummary"></div>
         </div>
-        <div class="customer-input-field">
-          <label>Nama Customer *</label>
-          <input type="text" id="namaCustomer" placeholder="Masukkan nama Anda" oninput="validateCustomerInfo()">
-          <span class="input-error-msg" id="namaCustomerError">Nama customer wajib diisi</span>
+      </div>
+      <div class="customer-info-form" id="customerInfoForm">
+        <div class="customer-input-group">
+          <div class="customer-input-grid">
+            <div class="customer-input-field">
+              <label>Tipe Pesanan *</label>
+              <select id="orderType" onchange="handleOrderTypeChange()" aria-label="Tipe pesanan">
+                <option value="dine_in" selected>Dine in</option>
+                <option value="takeaway">Take away</option>
+                <option value="delivery">Delivery</option>
+              </select>
+            </div>
+            <div class="customer-input-field">
+              <label id="nomorMejaLabel">Nomor Meja *</label>
+              <input type="text" id="nomorMeja" placeholder="Contoh: 1, 2, 3..." oninput="renderCustomerInfoSummary();validateCustomerInfo()">
+              <span class="input-error-msg" id="nomorMejaError">Nomor meja wajib diisi</span>
+            </div>
+            <div class="customer-input-field">
+              <label>Nama Customer *</label>
+              <input type="text" id="namaCustomer" placeholder="Masukkan nama Anda" oninput="renderCustomerInfoSummary();validateCustomerInfo()">
+              <span class="input-error-msg" id="namaCustomerError">Nama customer wajib diisi</span>
+            </div>
+          </div>
+        </div>
+        <div class="customer-input-group" id="deliveryAddressGroup" style="display:none;">
+          <div class="customer-input-field full-width">
+            <label>Detail Alamat Pengiriman *</label>
+            <textarea id="deliveryAddress" placeholder="Masukkan alamat lengkap pengiriman" oninput="renderCustomerInfoSummary();validateCustomerInfo()" rows="3"></textarea>
+            <span class="input-error-msg" id="deliveryAddressError">Detail alamat pengiriman wajib diisi</span>
+          </div>
         </div>
       </div>
     </div>
@@ -395,7 +527,7 @@
       <div id="paymentOptionsSection">
         <div class="payment-total-section" id="paymentSummaryDisplay"></div>
         <div class="payment-options">
-          <div class="payment-option" onclick="selectPaymentMethod('cash',this)">
+          <div class="payment-option" data-method="cash" onclick="selectPaymentMethod('cash',this)">
             <div class="payment-option-icon cash">Rp</div>
             <div class="payment-option-info">
               <div class="payment-option-title">Bayar Tunai (Cash)</div>
@@ -403,7 +535,7 @@
             </div>
             <div class="payment-option-radio"></div>
           </div>
-          <div class="payment-option" onclick="selectPaymentMethod('qris',this)">
+          <div class="payment-option" data-method="qris" onclick="selectPaymentMethod('qris',this)">
             <div class="payment-option-icon qris">QR</div>
             <div class="payment-option-info">
               <div class="payment-option-title">QRIS</div>
@@ -412,6 +544,7 @@
             <div class="payment-option-radio"></div>
           </div>
         </div>
+        <div class="payment-method-hint" id="paymentMethodHint"></div>
         <button class="confirm-payment-btn" id="confirmPaymentBtn" onclick="confirmPaymentMethod()" disabled>Lanjutkan Pembayaran</button>
       </div>
     </div>
@@ -433,32 +566,69 @@ window.OGI_APP_CONFIG = window.OGI_APP_CONFIG || {
 
 // ==================== STATE ====================
 var cart = [];
-var feeSettings = { qrisFee:{enabled:false,value:0,unit:'percent'}, tax:{enabled:false,value:0,unit:'percent'}, discount:{enabled:false,value:0,unit:'percent'} };
+var feeSettings = {
+  qrisFee:{enabled:false,value:0,unit:'percent'},
+  tax:{enabled:false,value:0,unit:'percent'},
+  discount:{enabled:false,value:0,unit:'percent'},
+  deliveryFee:{enabled:false,value:0,unit:'fixed'},
+  orderTypeDineIn:{enabled:true,value:0,unit:'toggle'},
+  orderTypeTakeaway:{enabled:true,value:0,unit:'toggle'},
+  orderTypeDelivery:{enabled:true,value:0,unit:'toggle'}
+};
 var selectedPaymentMethod = null;
 var currentOrderData = null;
 var activeCategoryId = null;
 var menuLookup = {};
+var favoriteMenuSales = null;
+var favoriteSlideIndex = 0;
+var favoriteSlideCount = 0;
+var favoriteSlideTimer = null;
 var APP_CONFIG = window.OGI_APP_CONFIG || {};
 var API_BASE_URL = String(APP_CONFIG.apiBaseUrl || '').trim();
-var MIDTRANS_CLIENT_KEY = 'Mid-client-_30W1GrONhNZIKe3';
-var SNAP_SCRIPT_SRC = 'https://app.midtrans.com/snap/snap.js';
-var snapScriptPromise = null;
-var bootstrapPromise = null;
+var bootstrapRequestPromise = null;
+var customerInfoCollapsed = false;
+var currentHistoryOrderTypeFilter = 'all';
+
+var ORDER_TYPE_CONFIG = [
+  {
+    value: 'dine_in',
+    label: 'Dine in',
+    locationLabel: 'Nomor Meja',
+    locationPlaceholder: 'Contoh: 1, 2, 3...',
+    locationError: 'Nomor meja wajib diisi',
+    requiresAddress: false
+  },
+  {
+    value: 'takeaway',
+    label: 'Take away',
+    locationLabel: 'No HP',
+    locationPlaceholder: 'Contoh: 08123456789',
+    locationError: 'Nomor HP customer wajib diisi',
+    requiresAddress: false
+  },
+  {
+    value: 'delivery',
+    label: 'Delivery',
+    locationLabel: 'No HP',
+    locationPlaceholder: 'Contoh: 08123456789',
+    locationError: 'Nomor HP customer wajib diisi',
+    requiresAddress: true
+  }
+];
 
 // ==================== CACHE ====================
 var CACHE_KEY = 'ogi_menu_catalog_v1';
 var CACHE_TIME_KEY = 'ogi_menu_catalog_time_v1';
-var CACHE_VERSION_KEY = 'ogi_menu_catalog_version_v1';
-var CACHE_DURATION = 30 * 60 * 1000;
-var CACHE_SCHEMA_VERSION = 'menu-active-only-v2';
-var CACHE_FALLBACK_DELAY = 1200;
+var BOOTSTRAP_CACHE_KEY = 'ogi_public_bootstrap_v1';
+var BOOTSTRAP_CACHE_TIME_KEY = 'ogi_public_bootstrap_time_v1';
+var CACHE_DURATION = 5 * 60 * 1000;
 
 function hasAppsScriptRuntime() {
   return !!(window.google && google.script && google.script.run);
 }
 
 function shouldUseExternalApi() {
-  return !!API_BASE_URL;
+  return !hasAppsScriptRuntime() && !!API_BASE_URL;
 }
 
 function buildApiUrl(action, params) {
@@ -506,94 +676,108 @@ function fetchApiGet(action, params) {
 }
 
 function fetchApiPost(action, data) {
-  var body = new URLSearchParams();
-  body.set('payload', JSON.stringify(data || {}));
   return fetch(buildApiUrl(action), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-    body: body.toString()
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data || {})
   }).then(parseApiJsonResponse);
 }
 
-function loadPublicBootstrapData() {
-  if (bootstrapPromise) return bootstrapPromise;
+function getTransportMode() {
+  if (hasAppsScriptRuntime()) return 'apps-script';
+  if (API_BASE_URL) return 'external-api';
+  return 'none';
+}
+
+function getCachedBootstrapData() {
+  try {
+    var t = localStorage.getItem(BOOTSTRAP_CACHE_TIME_KEY);
+    if (t && (Date.now() - parseInt(t, 10)) < CACHE_DURATION) {
+      var raw = localStorage.getItem(BOOTSTRAP_CACHE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.success && parsed.data) return parsed;
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
+function saveBootstrapToCache(data) {
+  try {
+    localStorage.setItem(BOOTSTRAP_CACHE_KEY, JSON.stringify(data));
+    localStorage.setItem(BOOTSTRAP_CACHE_TIME_KEY, String(Date.now()));
+  } catch (e) {}
+}
+
+function loadPublicBootstrapData(forceRefresh) {
+  if (!forceRefresh) {
+    var cached = getCachedBootstrapData();
+    if (cached) return Promise.resolve(cached);
+    if (bootstrapRequestPromise) return bootstrapRequestPromise;
+  }
+
   if (shouldUseExternalApi()) {
-    bootstrapPromise = fetchApiGet('bootstrap');
-  } else if (!hasAppsScriptRuntime()) {
-    bootstrapPromise = Promise.reject(new Error('API publik belum dikonfigurasi'));
+    bootstrapRequestPromise = fetchApiGet('bootstrap');
   } else {
-    bootstrapPromise = Promise.all([
+    if (!hasAppsScriptRuntime()) return Promise.reject(new Error('API publik belum dikonfigurasi'));
+    bootstrapRequestPromise = Promise.all([
       callServerFunction('getMenuCatalog'),
-      callServerFunction('getFeeSettings')
+      callServerFunction('getFeeSettings'),
+      callServerFunction('getDashboardData', [null, null])
     ]).then(function(results) {
       return {
         success: true,
         data: {
           menuCatalog: results[0] && results[0].data ? results[0].data : null,
-          feeSettings: results[1] && results[1].data ? results[1].data : null
+          feeSettings: results[1] && results[1].data ? results[1].data : null,
+          topMenu: results[2] && Array.isArray(results[2].topMenu) ? results[2].topMenu : []
         }
       };
     });
   }
-  bootstrapPromise = bootstrapPromise.catch(function(err) {
-    bootstrapPromise = null;
-    throw err;
-  });
-  return bootstrapPromise;
-}
 
-function ensureSnapLoaded() {
-  if (window.snap && typeof window.snap.pay === 'function') return Promise.resolve(window.snap);
-  if (snapScriptPromise) return snapScriptPromise;
-  snapScriptPromise = new Promise(function(resolve, reject) {
-    var existing = document.querySelector('script[data-midtrans-snap="true"]');
-    if (existing) {
-      existing.addEventListener('load', function() { resolve(window.snap); }, { once: true });
-      existing.addEventListener('error', function() { reject(new Error('Gagal memuat Midtrans Snap')); }, { once: true });
-      return;
-    }
-    var script = document.createElement('script');
-    script.src = SNAP_SCRIPT_SRC;
-    script.defer = true;
-    script.dataset.clientKey = MIDTRANS_CLIENT_KEY;
-    script.setAttribute('data-client-key', MIDTRANS_CLIENT_KEY);
-    script.setAttribute('data-midtrans-snap', 'true');
-    script.onload = function() { resolve(window.snap); };
-    script.onerror = function() { reject(new Error('Gagal memuat Midtrans Snap')); };
-    document.head.appendChild(script);
-  }).catch(function(err) {
-    snapScriptPromise = null;
-    throw err;
-  });
-  return snapScriptPromise;
+  return bootstrapRequestPromise
+    .then(function(result) {
+      bootstrapRequestPromise = null;
+      if (result && result.success && result.data) {
+        saveBootstrapToCache(result);
+      }
+      return result;
+    })
+    .catch(function(error) {
+      bootstrapRequestPromise = null;
+      throw error;
+    });
 }
 
 function saveOrderRequest(orderData) {
+  if (hasAppsScriptRuntime()) return callServerFunction('saveOrder', [orderData]);
   if (shouldUseExternalApi()) return fetchApiPost('saveOrder', orderData);
-  return callServerFunction('saveOrder', [orderData]);
+  return Promise.reject(new Error('Metode koneksi checkout tidak tersedia'));
 }
 
 function createMidtransTransactionRequest(orderData) {
+  if (hasAppsScriptRuntime()) return callServerFunction('createMidtransTransaction', [orderData]);
   if (shouldUseExternalApi()) return fetchApiPost('createMidtransTransaction', orderData);
-  return callServerFunction('createMidtransTransaction', [orderData]);
+  return Promise.reject(new Error('Metode koneksi pembayaran tidak tersedia'));
 }
 
 function updateOrderStatusRequest(orderId, newStatus) {
+  if (hasAppsScriptRuntime()) return callServerFunction('updateOrderStatus', [orderId, newStatus]);
   if (shouldUseExternalApi()) return fetchApiPost('updateOrderStatus', { orderId: orderId, newStatus: newStatus });
-  return callServerFunction('updateOrderStatus', [orderId, newStatus]);
+  return Promise.reject(new Error('Metode koneksi update status tidak tersedia'));
 }
 
 function getCachedMenuCatalog() {
   try {
-    if (localStorage.getItem(CACHE_VERSION_KEY) !== CACHE_SCHEMA_VERSION) {
-      clearMenuCatalogCache();
-      return null;
-    }
     var t = localStorage.getItem(CACHE_TIME_KEY);
     if (t && (Date.now() - parseInt(t)) < CACHE_DURATION) {
       var d = localStorage.getItem(CACHE_KEY);
       if (d) {
-        return sanitizeMenuCatalog(JSON.parse(d));
+        var parsed = JSON.parse(d);
+        if (Array.isArray(parsed)) return { menuItems: parsed, categories: DEFAULT_CATEGORIES };
+        if (parsed && parsed.menuItems && parsed.categories) return parsed;
       }
     }
   } catch(e) {}
@@ -602,52 +786,9 @@ function getCachedMenuCatalog() {
 
 function saveMenuCatalogToCache(data) {
   try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(sanitizeMenuCatalog(data)));
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
     localStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
-    localStorage.setItem(CACHE_VERSION_KEY, CACHE_SCHEMA_VERSION);
   } catch(e) {}
-}
-
-function clearMenuCatalogCache() {
-  try {
-    localStorage.removeItem(CACHE_KEY);
-    localStorage.removeItem(CACHE_TIME_KEY);
-    localStorage.removeItem(CACHE_VERSION_KEY);
-  } catch (e) {}
-}
-
-function sanitizeMenuCatalog(catalog) {
-  var safeCatalog = catalog || {};
-  var categories = Array.isArray(safeCatalog.categories) ? safeCatalog.categories : DEFAULT_CATEGORIES.slice();
-  var menuItems = Array.isArray(safeCatalog.menuItems) ? safeCatalog.menuItems : [];
-  var activeCategories = categories
-    .filter(function(category) { return category && category.active !== false; })
-    .map(function(category) {
-      return {
-        id: category.id || '',
-        slug: String(category.slug || ''),
-        name: category.name || category.slug || '',
-        icon: category.icon || '🍽️',
-        active: category.active !== false,
-        sortOrder: category.sortOrder || 0
-      };
-    });
-  var allowedCategoryMap = {};
-  activeCategories.forEach(function(category) {
-    allowedCategoryMap[category.slug] = true;
-  });
-  var activeMenuItems = menuItems
-    .filter(function(item) {
-      return item && item.active !== false && allowedCategoryMap[item.category];
-    })
-    .map(function(item) {
-      return item;
-    });
-
-  return {
-    categories: activeCategories,
-    menuItems: activeMenuItems
-  };
 }
 
 var DEFAULT_CATEGORIES = [
@@ -678,7 +819,142 @@ var DEFAULT_MENU = [
     {category:'dessert',name:'Pisjoe',price:11000,icon:'🍌',active:true,imageUrl:'',info:'Camilan manis khas Ogi Family dengan cita rasa legit.'},
     {category:'dessert',name:"Katiri Sa'la",price:15000,icon:'🍮',active:true,imageUrl:'',info:'Dessert khas dengan tekstur lembut dan rasa manis pas.'},
     {category:'dessert',name:'Nona Manis',price:15000,icon:'🧁',active:true,imageUrl:'',info:'Kue manis lembut untuk penutup makan yang ringan.'}
-  ];
+];
+
+function getOrderTypeSettingKey(orderType) {
+  if (orderType === 'takeaway') return 'orderTypeTakeaway';
+  if (orderType === 'delivery') return 'orderTypeDelivery';
+  return 'orderTypeDineIn';
+}
+
+function isOrderTypeEnabled(orderType) {
+  var key = getOrderTypeSettingKey(orderType);
+  var setting = feeSettings && feeSettings[key];
+  return !setting || setting.enabled !== false;
+}
+
+function getEnabledOrderTypes() {
+  var enabled = ORDER_TYPE_CONFIG.filter(function(option) {
+    return isOrderTypeEnabled(option.value);
+  });
+  return enabled.length ? enabled : [ORDER_TYPE_CONFIG[0]];
+}
+
+function getSelectedOrderType() {
+  var el = document.getElementById('orderType');
+  var fallback = getEnabledOrderTypes()[0].value;
+  if (!el) return fallback;
+  var value = String(el.value || '').trim();
+  return isOrderTypeEnabled(value) ? value : fallback;
+}
+
+function getOrderTypeMeta(orderType) {
+  var type = String(orderType || 'dine_in').trim();
+  for (var i = 0; i < ORDER_TYPE_CONFIG.length; i++) {
+    if (ORDER_TYPE_CONFIG[i].value === type) return ORDER_TYPE_CONFIG[i];
+  }
+  return ORDER_TYPE_CONFIG[0];
+}
+
+function isQrisOnlyOrderType(orderType) {
+  return String(orderType || '').trim() === 'takeaway';
+}
+
+function renderOrderTypeOptions(preferredValue) {
+  var select = document.getElementById('orderType');
+  if (!select) return;
+
+  var enabledTypes = getEnabledOrderTypes();
+  var currentValue = preferredValue || String(select.value || '').trim() || enabledTypes[0].value;
+  select.innerHTML = enabledTypes.map(function(option) {
+    return '<option value="' + option.value + '">' + option.label + '</option>';
+  }).join('');
+
+  var hasCurrentValue = enabledTypes.some(function(option) {
+    return option.value === currentValue;
+  });
+  select.value = hasCurrentValue ? currentValue : enabledTypes[0].value;
+}
+
+function truncateText(value, maxLength) {
+  var text = String(value || '').trim();
+  if (!text) return '-';
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength - 1) + '…';
+}
+
+function renderCustomerInfoSummary() {
+  var container = document.getElementById('customerInfoSummary');
+  if (!container) return;
+  container.innerHTML = '';
+}
+
+function setCustomerInfoCollapsed(collapsed) {
+  var info = document.getElementById('customerInfo');
+  customerInfoCollapsed = false;
+  if (info) {
+    info.classList.remove('collapsed');
+  }
+  renderCustomerInfoSummary();
+}
+
+function toggleCustomerInfoPanel() {
+  setCustomerInfoCollapsed(false);
+}
+
+function getOrderLocationDisplay(order) {
+  var current = order || {};
+  var meta = getOrderTypeMeta(current.orderType);
+  return {
+    typeLabel: meta.label,
+    locationLabel: meta.locationLabel,
+    locationValue: String(current.nomorMeja || '').trim() || '-',
+    customerName: String(current.namaCustomer || '').trim() || '-',
+    deliveryAddress: String(current.deliveryAddress || '').trim()
+  };
+}
+
+function handleOrderTypeChange() {
+  renderOrderTypeOptions(getSelectedOrderType());
+  var orderType = getSelectedOrderType();
+  var meta = getOrderTypeMeta(orderType);
+  var nomorMejaInput = document.getElementById('nomorMeja');
+  var nomorMejaLabel = document.getElementById('nomorMejaLabel');
+  var nomorMejaError = document.getElementById('nomorMejaError');
+  var deliveryGroup = document.getElementById('deliveryAddressGroup');
+  var deliveryInput = document.getElementById('deliveryAddress');
+  var deliveryError = document.getElementById('deliveryAddressError');
+
+  if (nomorMejaLabel) nomorMejaLabel.textContent = meta.locationLabel + ' *';
+  if (nomorMejaInput) {
+    nomorMejaInput.placeholder = meta.locationPlaceholder;
+  }
+  if (nomorMejaError) {
+    nomorMejaError.textContent = meta.locationError;
+  }
+
+  if (deliveryGroup) {
+    deliveryGroup.style.display = meta.requiresAddress ? 'flex' : 'none';
+  }
+
+  if (!meta.requiresAddress && deliveryInput) {
+    deliveryInput.value = '';
+    deliveryInput.classList.remove('error');
+  }
+  if (deliveryError) {
+    deliveryError.classList.remove('show');
+  }
+
+  if (meta.requiresAddress) {
+    setCustomerInfoCollapsed(false);
+  } else {
+    renderCustomerInfoSummary();
+  }
+
+  updateCartUI();
+  renderPaymentOptions(orderType);
+  validateCustomerInfo();
+}
 
 // ==================== MENU ====================
 function showCategory(id, btn) {
@@ -929,7 +1205,7 @@ function syncCartItem(item) {
   var menu = menuLookup[item.menuKey];
   if (menu) {
     var menuVariants = normalizeVariantList(menu.variants, menu.price);
-    if (menuVariants.length) item.variants = menuVariants;
+    item.variants = menuVariants;
     if ((!item.menuId || item.menuId === '') && menu.id) item.menuId = menu.id;
     if (!item.category) item.category = menu.category || '';
     if (!item.icon) item.icon = menu.icon || item.icon;
@@ -982,36 +1258,30 @@ function getDefaultMenuCatalog() {
 
 function loadMenu() {
   var cached = getCachedMenuCatalog();
-  var fallbackTimer = null;
-  if (cached) {
-    fallbackTimer = setTimeout(function() {
-      renderMenuCatalog(cached);
-    }, CACHE_FALLBACK_DELAY);
-  }
-  loadPublicBootstrapData()
+  renderMenuCatalog(cached || getDefaultMenuCatalog());
+
+  loadPublicBootstrapData(true)
     .then(function(r) {
-      if (fallbackTimer) {
-        clearTimeout(fallbackTimer);
-        fallbackTimer = null;
-      }
       if (!r || !r.success || !r.data) return;
-      if (r.data.feeSettings) feeSettings = r.data.feeSettings;
-      if (r.data.menuCatalog) {
-        var liveCatalog = sanitizeMenuCatalog(r.data.menuCatalog);
-        saveMenuCatalogToCache(liveCatalog);
-        renderMenuCatalog(liveCatalog);
+      if (r.data.feeSettings) {
+        feeSettings = r.data.feeSettings;
+        renderOrderTypeOptions(getSelectedOrderType());
       }
+      favoriteMenuSales = Array.isArray(r.data.topMenu) ? r.data.topMenu : [];
+      if (r.data.menuCatalog) {
+        saveMenuCatalogToCache(r.data.menuCatalog);
+        renderMenuCatalog(r.data.menuCatalog);
+      } else {
+        renderFavoriteMenus(favoriteMenuSales, cached || getDefaultMenuCatalog());
+      }
+      renderCustomerInfoSummary();
+      renderHistoryFilterBar();
       updateCartUI();
     })
     .catch(function(err) {
-      if (fallbackTimer) {
-        clearTimeout(fallbackTimer);
-        fallbackTimer = null;
-      }
-      if (cached) {
-        renderMenuCatalog(cached);
-      } else {
-        renderMenuCatalog(getDefaultMenuCatalog());
+      if (favoriteMenuSales === null) {
+        favoriteMenuSales = [];
+        renderFavoriteMenus(favoriteMenuSales, cached || getDefaultMenuCatalog());
       }
       console.warn('Gagal memuat bootstrap publik:', err);
     });
@@ -1093,11 +1363,148 @@ function renderMenuCatalog(catalog) {
     grid.innerHTML = html;
   });
 
+  renderFavoriteMenus(favoriteMenuSales, catalog);
+
   var hasCurrentCategory = false;
   categories.forEach(function(category) {
     if (category.slug === activeCategoryId) hasCurrentCategory = true;
   });
   showCategory(hasCurrentCategory ? activeCategoryId : categories[0].slug);
+}
+
+function renderFavoriteMenus(topMenu, catalog) {
+  var section = document.getElementById('favorite');
+  var container = document.getElementById('favoriteMenuGrid');
+  if (!container || !section) return;
+
+  stopFavoriteSlideshow();
+
+  if (topMenu === null) {
+    favoriteSlideCount = 0;
+    favoriteSlideIndex = 0;
+    section.hidden = true;
+    container.innerHTML = '';
+    return;
+  }
+
+  var items = ((catalog && catalog.menuItems) || DEFAULT_MENU).map(function(item) {
+    item = item || {};
+    item.variants = normalizeVariantList(item.variants, item.price);
+    return item;
+  });
+
+  var itemMap = {};
+  items.forEach(function(item) {
+    if (!item || item.active === false) return;
+    itemMap[String(item.name || '').toLowerCase()] = item;
+  });
+
+  var favorites = (topMenu || []).slice(0, 5).map(function(entry, index) {
+    var item = itemMap[String(entry.name || '').toLowerCase()] || {};
+    return {
+      rank: index + 1,
+      name: entry.name || item.name || 'Menu Favorit',
+      qty: parseInt(entry.qty, 10) || 0,
+      imageUrl: item.imageUrl || '',
+      icon: item.icon || '🍽️',
+      info: item.info || 'Menu favorit pelanggan Ogi Family.',
+      priceLabel: item.name ? getMenuPriceLabel(item) : ''
+    };
+  });
+
+  if (!favorites.length) {
+    favoriteSlideCount = 0;
+    favoriteSlideIndex = 0;
+    section.hidden = true;
+    container.innerHTML = '';
+    return;
+  }
+
+  section.hidden = false;
+  var slides = [];
+  for (var i = 0; i < favorites.length; i += 2) {
+    slides.push(favorites.slice(i, i + 2));
+  }
+
+  favoriteSlideCount = slides.length;
+  if (favoriteSlideIndex >= favoriteSlideCount) favoriteSlideIndex = 0;
+
+  var slidesHtml = slides.map(function(group) {
+    return '<div class="favorite-slide">' + group.map(function(item) {
+    var mediaHtml = item.imageUrl
+      ? '<img src="' + item.imageUrl + '" alt="' + escapeHtml(item.name) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="favorite-icon" style="display:none;">' + escapeHtml(item.icon) + '</div>'
+      : '<div class="favorite-icon">' + escapeHtml(item.icon) + '</div>';
+
+    return '<article class="favorite-card">' +
+      '<div class="favorite-rank">' + item.rank + '</div>' +
+      '<div class="favorite-main">' +
+      '<div class="favorite-media">' + mediaHtml + '</div>' +
+      '<div class="favorite-info">' +
+      '<div class="favorite-name">' + escapeHtml(item.name) + '</div>' +
+      '<div class="favorite-meta">' + escapeHtml(item.info) + '</div>' +
+      (item.priceLabel ? '<div class="favorite-price">' + item.priceLabel + '</div>' : '') +
+      '</div>' +
+      '</div>' +
+      '<div class="favorite-sales"><strong>' + item.qty + 'x</strong><span>terjual</span></div>' +
+      '</article>';
+    }).join('') + '</div>';
+  }).join('');
+
+  var dotsHtml = slides.map(function(_, index) {
+    return '<span class="favorite-dot' + (index === favoriteSlideIndex ? ' active' : '') + '" data-slide-index="' + index + '"></span>';
+  }).join('');
+
+  container.innerHTML =
+    '<div class="favorite-slider">' +
+      '<div class="favorite-track" id="favoriteTrack">' + slidesHtml + '</div>' +
+    '</div>' +
+    (favoriteSlideCount > 1
+      ? '<div class="favorite-controls">' +
+          '<div class="favorite-nav">' +
+            '<button type="button" class="favorite-nav-btn" onclick="prevFavoriteSlide()" aria-label="Slide favorit sebelumnya">&#8249;</button>' +
+            '<button type="button" class="favorite-nav-btn" onclick="nextFavoriteSlide()" aria-label="Slide favorit berikutnya">&#8250;</button>' +
+          '</div>' +
+          '<div class="favorite-dots">' + dotsHtml + '</div>' +
+        '</div>'
+      : '');
+
+  updateFavoriteSlide(favoriteSlideIndex);
+  startFavoriteSlideshow();
+}
+
+function updateFavoriteSlide(index) {
+  var track = document.getElementById('favoriteTrack');
+  if (!track || !favoriteSlideCount) return;
+  favoriteSlideIndex = (index + favoriteSlideCount) % favoriteSlideCount;
+  track.style.transform = 'translateX(' + (-favoriteSlideIndex * 100) + '%)';
+  document.querySelectorAll('.favorite-dot').forEach(function(dot, dotIndex) {
+    dot.classList.toggle('active', dotIndex === favoriteSlideIndex);
+  });
+}
+
+function stopFavoriteSlideshow() {
+  if (favoriteSlideTimer) {
+    clearInterval(favoriteSlideTimer);
+    favoriteSlideTimer = null;
+  }
+}
+
+function startFavoriteSlideshow() {
+  stopFavoriteSlideshow();
+  if (favoriteSlideCount <= 1) return;
+  favoriteSlideTimer = setInterval(function() {
+    updateFavoriteSlide(favoriteSlideIndex + 1);
+  }, 4500);
+}
+
+function prevFavoriteSlide() {
+  updateFavoriteSlide(favoriteSlideIndex - 1);
+  startFavoriteSlideshow();
+}
+
+function nextFavoriteSlide() {
+  updateFavoriteSlide(favoriteSlideIndex + 1);
+  startFavoriteSlideshow();
 }
 
 // ==================== FEE ====================
@@ -1106,6 +1513,9 @@ function loadFeeSettings() {
     .then(function(r) {
       if (r && r.success && r.data && r.data.feeSettings) {
         feeSettings = r.data.feeSettings;
+        renderOrderTypeOptions(getSelectedOrderType());
+        renderCustomerInfoSummary();
+        renderHistoryFilterBar();
         updateCartUI();
       }
     })
@@ -1120,17 +1530,22 @@ function calcFee(base, fee) {
 }
 
 function calcWithFees(subtotal, inclQris) {
+  var orderType = getSelectedOrderType();
   var tax = calcFee(subtotal, feeSettings.tax);
   var disc = calcFee(subtotal, feeSettings.discount);
+  var deliveryFee = orderType === 'delivery' ? calcFee(subtotal, feeSettings.deliveryFee) : 0;
   var qf = inclQris ? calcFee(subtotal, feeSettings.qrisFee) : 0;
   return {
     subtotal: subtotal, tax: tax,
     taxEnabled: !!(feeSettings.tax && feeSettings.tax.enabled), taxLabel: feeSettings.tax && feeSettings.tax.unit==='percent' ? 'Pajak ('+feeSettings.tax.value+'%)' : 'Pajak',
     discount: disc,
     discountEnabled: !!(feeSettings.discount && feeSettings.discount.enabled), discountLabel: feeSettings.discount && feeSettings.discount.unit==='percent' ? 'Diskon ('+feeSettings.discount.value+'%)' : 'Diskon',
+    deliveryFee: deliveryFee,
+    deliveryFeeEnabled: !!(feeSettings.deliveryFee && feeSettings.deliveryFee.enabled),
+    deliveryFeeLabel: 'Ongkir Delivery',
     qrisFee: qf,
     qrisFeeEnabled: !!(feeSettings.qrisFee && feeSettings.qrisFee.enabled), qrisFeeLabel: feeSettings.qrisFee && feeSettings.qrisFee.unit==='percent' ? 'Fee QRIS ('+feeSettings.qrisFee.value+'%)' : 'Fee QRIS',
-    grandTotal: Math.max(0, subtotal + tax + qf - disc)
+    grandTotal: Math.max(0, subtotal + tax + deliveryFee + qf - disc)
   };
 }
 
@@ -1199,14 +1614,19 @@ function updateCartUI() {
   var badge = document.getElementById('cartBadge');
   if (total > 0) { badge.textContent = total; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
 
-  var fees = calcWithFees(sub, false);
+  var qrisOnly = isQrisOnlyOrderType(getSelectedOrderType());
+  var fees = calcWithFees(sub, qrisOnly);
   var sHtml = '<div class="cart-summary-row subtotal"><span class="cart-summary-label">Subtotal</span><span class="cart-summary-value">'+fmtRp(fees.subtotal)+'</span></div>';
   if (fees.taxEnabled && fees.tax > 0) sHtml += '<div class="cart-summary-row fee"><span class="cart-summary-label">'+fees.taxLabel+'</span><span class="cart-summary-value">+ '+fmtRp(fees.tax)+'</span></div>';
   if (fees.discountEnabled && fees.discount > 0) sHtml += '<div class="cart-summary-row discount"><span class="cart-summary-label">'+fees.discountLabel+'</span><span class="cart-summary-value">- '+fmtRp(fees.discount)+'</span></div>';
-  if (fees.qrisFeeEnabled) sHtml += '<div class="cart-summary-row fee" style="font-size:0.8rem;color:#999"><span>'+fees.qrisFeeLabel+'</span><span>*berlaku jika bayar QRIS</span></div>';
+  if (fees.deliveryFeeEnabled && fees.deliveryFee > 0) sHtml += '<div class="cart-summary-row fee"><span class="cart-summary-label">'+fees.deliveryFeeLabel+'</span><span class="cart-summary-value">+ '+fmtRp(fees.deliveryFee)+'</span></div>';
+  if (fees.qrisFeeEnabled && fees.qrisFee > 0) sHtml += '<div class="cart-summary-row fee"><span class="cart-summary-label">'+fees.qrisFeeLabel+'</span><span class="cart-summary-value">+ '+fmtRp(fees.qrisFee)+'</span></div>';
+  else if (fees.qrisFeeEnabled && qrisOnly) sHtml += '<div class="cart-summary-row fee"><span class="cart-summary-label">'+fees.qrisFeeLabel+'</span><span class="cart-summary-value">+ '+fmtRp(fees.qrisFee)+'</span></div>';
+  else if (fees.qrisFeeEnabled) sHtml += '<div class="cart-summary-row fee" style="font-size:0.8rem;color:#999"><span>'+fees.qrisFeeLabel+'</span><span>*berlaku jika bayar QRIS</span></div>';
   sHtml += '<div class="cart-summary-row total"><span class="cart-summary-label">Total</span><span class="cart-summary-value">'+fmtRp(fees.grandTotal)+'</span></div>';
   document.getElementById('cartSummary').innerHTML = sHtml;
 
+  renderCustomerInfoSummary();
   validateCustomerInfo();
 
   var body = document.getElementById('cartBody');
@@ -1230,7 +1650,6 @@ function updateCartUI() {
         html += '<div class="cart-variant-main"><div class="cart-variant-name">' + escapeHtml(optionName) + '</div><div class="cart-variant-price">' + fmtRp(optionPrice) + ' / item</div></div>';
         html += '<div class="cart-variant-controls">';
         html += '<div class="cart-variant-qty-group"><span class="cart-variant-meta-label">Jumlah</span><div class="cart-variant-stepper" role="group" aria-label="Pengatur jumlah varian ' + escapeHtml(optionName) + '"><button class="cart-variant-step-btn" type="button" aria-label="Kurangi jumlah varian ' + escapeHtml(optionName) + '" onclick="updateVariantQtyByDelta(' + j + ',\'' + escName(optionName) + '\',-1)"' + (optionQty <= 0 ? ' disabled' : '') + '>-</button><span class="cart-variant-step-value">' + optionQty + '</span><button class="cart-variant-step-btn" type="button" aria-label="Tambah jumlah varian ' + escapeHtml(optionName) + '" onclick="updateVariantQtyByDelta(' + j + ',\'' + escName(optionName) + '\',1)"' + (optionQty >= optionMaxQty ? ' disabled' : '') + '>+</button></div></div>';
-        html += '<div class="cart-variant-subtotal"><span class="cart-variant-meta-label">Subtotal</span><strong>' + fmtRp(optionQty * optionPrice) + '</strong></div>';
         html += '</div>';
         html += '</div>';
       });
@@ -1239,8 +1658,6 @@ function updateCartUI() {
         ? '<div class="cart-variant-remaining">Sisa ' + remainingQty + ' item belum dibagi ke varian.</div>'
         : '<div class="cart-variant-ready">Jumlah varian sudah lengkap.</div>';
       html += '</div>';
-    } else {
-      html += '<div class="cart-item-note"><label class="cart-field-label">Varian</label><select disabled><option>Tanpa varian</option></select></div>';
     }
     html += '</div>';
     html += '<div class="cart-item-actions">';
@@ -1256,12 +1673,15 @@ function openCart() { document.getElementById('cartModal').classList.add('active
 function closeCart() { document.getElementById('cartModal').classList.remove('active'); document.body.style.overflow = ''; }
 
 function validateCustomerInfo() {
+  var orderType = getSelectedOrderType();
+  var meta = getOrderTypeMeta(orderType);
   var meja = document.getElementById('nomorMeja').value.trim();
   var nama = document.getElementById('namaCustomer').value.trim();
+  var deliveryAddress = document.getElementById('deliveryAddress').value.trim();
   var variantsReady = cart.every(function(it) {
     return isVariantAllocationComplete(it);
   });
-  var valid = meja && nama && cart.length > 0 && variantsReady;
+  var valid = meja && nama && cart.length > 0 && variantsReady && (!meta.requiresAddress || deliveryAddress);
   document.getElementById('checkoutBtn').disabled = !valid;
   return valid;
 }
@@ -1270,32 +1690,48 @@ function validateCustomerInfo() {
 function checkout() {
   if (!cart.length) return;
   normalizeCartState();
+  var orderType = getSelectedOrderType();
+  var meta = getOrderTypeMeta(orderType);
   var meja = document.getElementById('nomorMeja').value.trim();
   var nama = document.getElementById('namaCustomer').value.trim();
+  var deliveryAddress = document.getElementById('deliveryAddress').value.trim();
   var hasErr = false;
   if (!meja) { document.getElementById('nomorMeja').classList.add('error'); document.getElementById('nomorMejaError').classList.add('show'); hasErr = true; }
   else { document.getElementById('nomorMeja').classList.remove('error'); document.getElementById('nomorMejaError').classList.remove('show'); }
   if (!nama) { document.getElementById('namaCustomer').classList.add('error'); document.getElementById('namaCustomerError').classList.add('show'); hasErr = true; }
   else { document.getElementById('namaCustomer').classList.remove('error'); document.getElementById('namaCustomerError').classList.remove('show'); }
+  if (meta.requiresAddress && !deliveryAddress) { document.getElementById('deliveryAddress').classList.add('error'); document.getElementById('deliveryAddressError').classList.add('show'); hasErr = true; }
+  else { document.getElementById('deliveryAddress').classList.remove('error'); document.getElementById('deliveryAddressError').classList.remove('show'); }
   if (cart.some(function(it) { return !isVariantAllocationComplete(it); })) {
     showToast('Lengkapi jumlah untuk tiap varian terlebih dahulu!');
     return;
   }
-  if (hasErr) { showToast('Lengkapi Nomor Meja dan Nama Customer!'); return; }
+  if (hasErr) { setCustomerInfoCollapsed(false); renderCustomerInfoSummary(); showToast('Lengkapi ' + meta.locationLabel + ', nama customer, dan alamat jika diperlukan.'); return; }
 
   var orderItems = expandCartItems(cart);
   var sub = orderItems.reduce(function(s,it){return s+it.price*it.qty;},0);
-  var fees = calcWithFees(sub, false);
+  var qrisOnly = isQrisOnlyOrderType(orderType);
+  var fees = calcWithFees(sub, qrisOnly);
   currentOrderData = {
+    orderType: orderType,
     nomorMeja: meja, namaCustomer: nama,
+    deliveryAddress: deliveryAddress,
     items: JSON.parse(JSON.stringify(orderItems)),
     subtotal: sub, totalPrice: fees.grandTotal,
-    fees: { tax:fees.tax, taxLabel:fees.taxLabel, discount:fees.discount, discountLabel:fees.discountLabel, qrisFee:0, qrisFeeLabel:fees.qrisFeeLabel }
+    fees: {
+      tax:fees.tax,
+      taxLabel:fees.taxLabel,
+      discount:fees.discount,
+      discountLabel:fees.discountLabel,
+      deliveryFee:fees.deliveryFee,
+      deliveryFeeLabel:fees.deliveryFeeLabel,
+      qrisFee:fees.qrisFee,
+      qrisFeeLabel:fees.qrisFeeLabel
+    }
   };
-  selectedPaymentMethod = null;
-  document.querySelectorAll('.payment-option').forEach(function(o){o.classList.remove('selected')});
-  document.getElementById('confirmPaymentBtn').disabled = true;
+  selectedPaymentMethod = qrisOnly ? 'qris' : null;
   renderPaymentSummary(fees);
+  renderPaymentOptions(orderType);
   closeCart();
   openPaymentModal();
 }
@@ -1308,20 +1744,65 @@ function renderPaymentSummary(fees) {
   h += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #d4c4a8"><span>Subtotal</span><span style="font-weight:600">'+fmtRp(fees.subtotal)+'</span></div>';
   if (fees.taxEnabled && fees.tax > 0) h += '<div style="display:flex;justify-content:space-between;padding:5px 0;color:#8b7355;font-size:0.9rem"><span>'+fees.taxLabel+'</span><span>+ '+fmtRp(fees.tax)+'</span></div>';
   if (fees.discountEnabled && fees.discount > 0) h += '<div style="display:flex;justify-content:space-between;padding:5px 0;color:#228b22;font-size:0.9rem"><span>'+fees.discountLabel+'</span><span>- '+fmtRp(fees.discount)+'</span></div>';
+  if (fees.deliveryFeeEnabled && fees.deliveryFee > 0) h += '<div style="display:flex;justify-content:space-between;padding:5px 0;color:#8b7355;font-size:0.9rem"><span>'+fees.deliveryFeeLabel+'</span><span>+ '+fmtRp(fees.deliveryFee)+'</span></div>';
   if (fees.qrisFeeEnabled && fees.qrisFee > 0) h += '<div style="display:flex;justify-content:space-between;padding:5px 0;color:#e65c00;font-size:0.9rem" id="qrisFeeRow"><span>'+fees.qrisFeeLabel+'</span><span>+ '+fmtRp(fees.qrisFee)+'</span></div>';
   h += '<div style="display:flex;justify-content:space-between;padding:10px 0;border-top:2px solid #d4c4a8;margin-top:6px"><span style="font-weight:600;font-size:1.05rem">Total</span><span style="font-weight:700;font-size:1.2rem;color:#e65c00" id="paymentGrandTotal">'+fmtRp(fees.grandTotal)+'</span></div>';
   document.getElementById('paymentSummaryDisplay').innerHTML = h;
 }
 
+function renderPaymentOptions(orderType) {
+  var effectiveOrderType = orderType || (currentOrderData && currentOrderData.orderType) || getSelectedOrderType();
+  var qrisOnly = isQrisOnlyOrderType(effectiveOrderType);
+  var hint = document.getElementById('paymentMethodHint');
+  var confirmBtn = document.getElementById('confirmPaymentBtn');
+
+  document.querySelectorAll('.payment-option').forEach(function(option) {
+    var method = option.getAttribute('data-method') || '';
+    var disabled = qrisOnly && method === 'cash';
+    option.classList.toggle('disabled', disabled);
+    option.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+    option.classList.toggle('selected', method === selectedPaymentMethod);
+  });
+
+  if (hint) {
+    hint.style.display = qrisOnly ? 'block' : 'none';
+    hint.textContent = qrisOnly ? 'Pesanan take away hanya bisa dibayar menggunakan QRIS.' : '';
+  }
+
+  if (qrisOnly) {
+    selectedPaymentMethod = 'qris';
+    document.querySelectorAll('.payment-option').forEach(function(option) {
+      option.classList.toggle('selected', (option.getAttribute('data-method') || '') === 'qris');
+    });
+  }
+
+  if (confirmBtn) {
+    confirmBtn.disabled = !selectedPaymentMethod;
+  }
+}
+
 function selectPaymentMethod(method, el) {
+  var effectiveOrderType = (currentOrderData && currentOrderData.orderType) || getSelectedOrderType();
+  if (method === 'cash' && isQrisOnlyOrderType(effectiveOrderType)) {
+    showToast('Pesanan take away hanya bisa dibayar via QRIS.');
+    renderPaymentOptions(effectiveOrderType);
+    return;
+  }
   selectedPaymentMethod = method;
-  document.querySelectorAll('.payment-option').forEach(function(o){o.classList.remove('selected')});
-  el.classList.add('selected');
-  document.getElementById('confirmPaymentBtn').disabled = false;
   var fees = calcWithFees(currentOrderData.subtotal, method === 'qris');
   currentOrderData.totalPrice = fees.grandTotal;
-  currentOrderData.fees.qrisFee = fees.qrisFee;
+  currentOrderData.fees = {
+    tax: fees.tax,
+    taxLabel: fees.taxLabel,
+    discount: fees.discount,
+    discountLabel: fees.discountLabel,
+    deliveryFee: fees.deliveryFee,
+    deliveryFeeLabel: fees.deliveryFeeLabel,
+    qrisFee: fees.qrisFee,
+    qrisFeeLabel: fees.qrisFeeLabel
+  };
   renderPaymentSummary(fees);
+  renderPaymentOptions(effectiveOrderType);
 }
 
 function confirmPaymentMethod() {
@@ -1348,10 +1829,7 @@ function processQrisMidtrans() {
   currentOrderData.paymentMethod = 'QRIS';
   currentOrderData.paymentStatus = 'Menunggu Pembayaran';
   currentOrderData.proofUrl = '';
-  ensureSnapLoaded()
-    .then(function() {
-      return saveOrderRequest(currentOrderData);
-    })
+  saveOrderRequest(currentOrderData)
     .then(function(r) {
       if (r.success) { currentOrderData.orderId = r.orderId; createMidtransPayment(); }
       else { hideProcessing(); showToast('Gagal menyimpan: ' + (r.error||'')); }
@@ -1394,8 +1872,12 @@ function completeOrder(type) {
   closePaymentModal();
   saveOrderToHistory(type);
   cart = [];
+  renderOrderTypeOptions('dine_in');
   document.getElementById('nomorMeja').value = '';
   document.getElementById('namaCustomer').value = '';
+  document.getElementById('deliveryAddress').value = '';
+  setCustomerInfoCollapsed(true);
+  handleOrderTypeChange();
   updateCartUI();
   var msgs = { cash:'Pesanan berhasil! Silakan bayar di kasir.', 'qris-success':'Pembayaran berhasil! Pesanan sedang diproses.', 'qris-pending':'Pesanan berhasil! Menunggu pembayaran selesai.' };
   showToast(msgs[type] || 'Pesanan berhasil! Menunggu konfirmasi kasir.');
@@ -1408,7 +1890,9 @@ function saveOrderToHistory(type) {
     hist.unshift({
       orderId: currentOrderData.orderId,
       timestamp: new Date().toLocaleString('id-ID',{timeZone:'Asia/Singapore',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+      orderType: currentOrderData.orderType || 'dine_in',
       nomorMeja: currentOrderData.nomorMeja, namaCustomer: currentOrderData.namaCustomer,
+      deliveryAddress: currentOrderData.deliveryAddress || '',
       items: currentOrderData.items.map(function(i){return{name:i.name,qty:i.qty,price:i.price,note:i.variant||i.note||'',variant:i.variant||i.note||''};}),
       subtotal: currentOrderData.subtotal, totalPrice: currentOrderData.totalPrice, fees: currentOrderData.fees || {},
       paymentMethod: currentOrderData.paymentMethod,
@@ -1436,31 +1920,66 @@ function closeHistoryModal() { document.getElementById('historyModalOverlay').cl
 function clearOrderHistory() {
   if (confirm('Hapus semua histori pesanan?')) {
     localStorage.removeItem('ogiFamily_orderHistory');
-    updateHistoryBadge(); renderOrderHistory(); showToast('Histori dihapus');
+    currentHistoryOrderTypeFilter = 'all';
+    updateHistoryBadge(); renderHistoryFilterBar(); renderOrderHistory(); showToast('Histori dihapus');
   }
+}
+
+function renderHistoryFilterBar() {
+  var container = document.getElementById('historyFilterBar');
+  if (!container) return;
+
+  var options = [{ value: 'all', label: 'Semua' }].concat(ORDER_TYPE_CONFIG.map(function(option) {
+    return { value: option.value, label: option.label };
+  }));
+
+  container.innerHTML = options.map(function(option) {
+    return '<button type="button" class="history-filter-btn' + (currentHistoryOrderTypeFilter === option.value ? ' active' : '') + '" onclick="setHistoryOrderTypeFilter(\'' + option.value + '\')">' + option.label + '</button>';
+  }).join('');
+}
+
+function setHistoryOrderTypeFilter(filter) {
+  currentHistoryOrderTypeFilter = filter || 'all';
+  renderHistoryFilterBar();
+  renderOrderHistory();
 }
 
 function renderOrderHistory() {
   var hist = getOrderHistory();
   var c = document.getElementById('historyModalBody');
+  renderHistoryFilterBar();
   if (!hist.length) { c.innerHTML = '<div class="history-empty"><p>Belum ada histori pesanan</p><p style="font-size:0.85rem;margin-top:8px">Pesanan Anda akan tersimpan di sini</p></div>'; return; }
-  var html = hist.map(function(o) {
+
+  var filteredHistory = currentHistoryOrderTypeFilter === 'all'
+    ? hist
+    : hist.filter(function(order) { return String(order.orderType || 'dine_in') === currentHistoryOrderTypeFilter; });
+  if (!filteredHistory.length) {
+    c.innerHTML = '<div class="history-empty"><p>Tidak ada histori untuk tipe pesanan ini</p><p style="font-size:0.85rem;margin-top:8px">Coba pilih filter lain.</p></div><button class="clear-history-btn" onclick="clearOrderHistory()">Hapus Semua Histori</button>';
+    return;
+  }
+  var html = filteredHistory.map(function(o) {
     var sc = o.paymentStatus === 'Pembayaran Dikonfirmasi' ? 'confirmed' : (o.paymentStatus === 'Bayar di Kasir' || o.paymentStatus === 'Menunggu Pembayaran') ? 'pending' : 'waiting';
+    var orderMeta = getOrderLocationDisplay(o);
     var items = o.items.map(function(it){
       var variant = escapeHtml(it.variant || it.note || '');
       return '<div class="history-menu-item"><span>'+it.qty+'x '+it.name+'</span><span>'+fmtRp(it.price*it.qty)+'</span></div>'+(variant?'<div class="history-menu-item-note">Varian: '+variant+'</div>':'');
     }).join('');
     var fees = o.fees || {};
     var feesHtml = '';
-    if (fees.tax > 0 || fees.discount > 0 || fees.qrisFee > 0) {
+    if (fees.tax > 0 || fees.discount > 0 || fees.deliveryFee > 0 || fees.qrisFee > 0) {
       feesHtml = '<div style="font-size:0.8rem;color:#8b7355;padding:6px 0;border-top:1px dashed #d4c4a8">';
       feesHtml += '<div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>'+fmtRp(o.subtotal||0)+'</span></div>';
       if (fees.tax>0) feesHtml += '<div style="display:flex;justify-content:space-between"><span>'+(fees.taxLabel||'Pajak')+'</span><span>+ '+fmtRp(fees.tax)+'</span></div>';
       if (fees.discount>0) feesHtml += '<div style="display:flex;justify-content:space-between;color:#228b22"><span>'+(fees.discountLabel||'Diskon')+'</span><span>- '+fmtRp(fees.discount)+'</span></div>';
+      if (fees.deliveryFee>0) feesHtml += '<div style="display:flex;justify-content:space-between"><span>'+(fees.deliveryFeeLabel||'Ongkir Delivery')+'</span><span>+ '+fmtRp(fees.deliveryFee)+'</span></div>';
       if (fees.qrisFee>0) feesHtml += '<div style="display:flex;justify-content:space-between;color:#e65c00"><span>'+(fees.qrisFeeLabel||'Fee QRIS')+'</span><span>+ '+fmtRp(fees.qrisFee)+'</span></div>';
       feesHtml += '</div>';
     }
-    return '<div class="history-item"><div class="history-item-header"><div><div class="history-order-id">'+o.orderId+'</div><div class="history-timestamp">'+o.timestamp+'</div></div><span class="history-status '+sc+'">'+o.paymentStatus+'</span></div><div class="history-customer-info">Meja '+o.nomorMeja+' - '+o.namaCustomer+'</div><div>'+items+'</div>'+feesHtml+'<div class="history-total"><span>Total</span><span>'+fmtRp(o.totalPrice)+'</span></div><span class="history-payment-method '+(o.paymentMethod==='CASH'?'cash':'qris')+'">'+o.paymentMethod+'</span></div>';
+    var customerInfo = orderMeta.typeLabel + ' | ' + orderMeta.locationLabel + ': ' + escapeHtml(orderMeta.locationValue) + ' - ' + escapeHtml(orderMeta.customerName);
+    if (orderMeta.deliveryAddress) {
+      customerInfo += '<br><span style="font-size:0.78rem;color:#8b7355;">Alamat: ' + escapeHtml(orderMeta.deliveryAddress) + '</span>';
+    }
+    return '<div class="history-item"><div class="history-item-header"><div><div class="history-order-id">'+o.orderId+'</div><div class="history-timestamp">'+o.timestamp+'</div></div><span class="history-status '+sc+'">'+o.paymentStatus+'</span></div><div class="history-customer-info">'+customerInfo+'</div><div>'+items+'</div>'+feesHtml+'<div class="history-total"><span>Total</span><span>'+fmtRp(o.totalPrice)+'</span></div><span class="history-payment-method '+(o.paymentMethod==='CASH'?'cash':'qris')+'">'+o.paymentMethod+'</span></div>';
   }).join('');
   html += '<button class="clear-history-btn" onclick="clearOrderHistory()">Hapus Semua Histori</button>';
   c.innerHTML = html;
@@ -1472,8 +1991,17 @@ function showToast(msg) {
   setTimeout(function(){ t.classList.remove('show'); }, 2200);
 }
 
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) stopFavoriteSlideshow();
+  else startFavoriteSlideshow();
+});
+
 // ==================== INIT ====================
 (function init() {
+  renderOrderTypeOptions('dine_in');
+  setCustomerInfoCollapsed(true);
+  renderHistoryFilterBar();
+  handleOrderTypeChange();
   updateCartUI();
   loadMenu();
   updateHistoryBadge();
