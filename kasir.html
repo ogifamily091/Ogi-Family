@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kasir - Ogi Family</title>
+  <!-- Preconnect for faster font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <!-- Midtrans Snap - Production (deferred for faster initial load) -->
+  <script type="text/javascript" src="https://app.midtrans.com/snap/snap.js"
+    data-client-key="Mid-client-_30W1GrONhNZIKe3" defer></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5efe3;
+      color: #3d2a1a;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Login Section */
+    .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: #5c4033;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      text-align: center;
+      color: #8b7355;
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 500;
+      color: #5c4033;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #d4c4a8;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #5c4033;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #5c4033 0%, #3d2a1a 100%);
+      color: #ffd700;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(92, 64, 51, 0.4);
+    }
+
+    .btn-primary:disabled {
+      background: #ccc;
+      color: #666;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .error-msg {
+      color: #cc0000;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-top: 16px;
+      display: none;
+    }
+
+    .error-msg.show {
+      display: block;
+    }
+
+    /* Kasir Panel */
+    .kasir-panel {
+      display: none;
+    }
+
+    .kasir-panel.active {
+      display: block;
+    }
+
+    .kasir-header {
+      background: linear-gradient(180deg, #5c4033 0%, #3d2a1a 100%);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .kasir-title {
+      font-family: 'Playfair Display', serif;
+      color: #ffd700;
+      font-size: 1.5rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-refresh {
+      background: rgba(255, 215, 0, 0.2);
+      color: #ffd700;
+      border: 1px solid rgba(255, 215, 0, 0.5);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-refresh:hover {
+      background: rgba(255, 215, 0, 0.3);
+    }
+
+    .btn-refresh.loading .refresh-icon {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Dashboard Stats */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #5c4033;
+    }
+
+    .stat-label {
+      color: #8b7355;
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .stat-card.pending .stat-number {
+      color: #e65c00;
+    }
+
+    .stat-card.confirmed .stat-number {
+      color: #0066cc;
+    }
+
+    .stat-card.completed .stat-number {
+      color: #228b22;
+    }
+
+    /* Tabs */
+    .kasir-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .kasir-tab {
+      padding: 10px 20px;
+      border: 2px solid #5c4033;
+      background: white;
+      color: #5c4033;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kasir-tab.active {
+      background: #5c4033;
+      color: white;
+    }
+
+    .tab-badge {
+      background: #e65c00;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .kasir-tab.active .tab-badge {
+      background: #ffd700;
+      color: #5c4033;
+    }
+
+    /* Order Cards */
+    .orders-container {
+      display: grid;
+      gap: 16px;
+    }
+
+    .order-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .order-header {
+      background: #f9f6f0;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid #e8dcc8;
+    }
+
+    .order-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .order-id {
+      font-weight: 700;
+      color: #5c4033;
+      font-size: 1rem;
+    }
+
+    .order-time {
+      color: #8b7355;
+      font-size: 0.8rem;
+    }
+
+    .order-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+
+    .meta-icon {
+      font-size: 1rem;
+    }
+
+    .meta-value {
+      font-weight: 600;
+      color: #5c4033;
+    }
+
+    .order-body {
+      padding: 20px;
+    }
+
+    .order-items {
+      margin-bottom: 16px;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed #e8dcc8;
+    }
+
+    .order-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-name {
+      color: #3d2a1a;
+    }
+
+    .item-qty {
+      color: #8b7355;
+      font-size: 0.85rem;
+    }
+
+    .item-price {
+      color: #5c4033;
+      font-weight: 500;
+    }
+
+    .order-summary {
+      background: #fff8e7;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    .order-summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: 0.9rem;
+    }
+
+    .order-summary-row.subtotal {
+      border-bottom: 1px dashed #d4c4a8;
+      padding-bottom: 8px;
+      margin-bottom: 4px;
+    }
+
+    .order-summary-row.fee {
+      color: #8b7355;
+      font-size: 0.85rem;
+    }
+
+    .order-summary-row.discount {
+      color: #228b22;
+      font-size: 0.85rem;
+    }
+
+    .order-summary-row.qris-fee {
+      color: #e65c00;
+      font-size: 0.85rem;
+    }
+
+    .order-summary-row.total {
+      border-top: 2px solid #d4c4a8;
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+
+    .order-summary-row.total .summary-label {
+      font-weight: 600;
+      color: #5c4033;
+    }
+
+    .order-summary-row.total .summary-value {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #e65c00;
+    }
+
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px;
+      background: #fff8e7;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .total-label {
+      font-weight: 600;
+      color: #5c4033;
+    }
+
+    .total-amount {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #e65c00;
+    }
+
+    .payment-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #f5efe3;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .payment-method {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .method-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .method-cash {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .method-qris {
+      background: #cce5ff;
+      color: #004085;
+    }
+
+    .method-debit {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-confirmed {
+      background: #cce5ff;
+      color: #004085;
+    }
+
+    .status-completed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .btn-view-proof {
+      background: #e7f1ff;
+      color: #0066cc;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-view-proof:hover {
+      background: #cce5ff;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      flex: 1;
+      min-width: 120px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-confirm {
+      background: #228b22;
+      color: white;
+    }
+
+    .btn-confirm:hover {
+      background: #1a6b1a;
+    }
+
+    .btn-complete {
+      background: #0066cc;
+      color: white;
+    }
+
+    .btn-complete:hover {
+      background: #0052a3;
+    }
+
+    .btn-method {
+      background: #8b7355;
+      color: white;
+    }
+
+    .btn-method:hover {
+      background: #6f5a44;
+    }
+
+    .btn-print {
+      background: #5c4033;
+      color: #ffd700;
+    }
+
+    .btn-print:hover {
+      background: #3d2a1a;
+    }
+
+    .btn-kitchen {
+      background: #e65c00;
+      color: white;
+    }
+
+    .btn-kitchen:hover {
+      background: #cc5200;
+    }
+
+    .btn-qris {
+      background: #00a9e0;
+      color: white;
+    }
+
+    .btn-qris:hover {
+      background: #0090c0;
+    }
+
+    .btn-action:disabled {
+      background: #ccc;
+      color: #666;
+      cursor: not-allowed;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 12px;
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+    }
+
+    .empty-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: #5c4033;
+      margin-bottom: 8px;
+    }
+
+    .empty-text {
+      color: #8b7355;
+      font-size: 0.9rem;
+    }
+
+    /* Loading State */
+    .loading-state {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e8dcc8;
+      border-top-color: #5c4033;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 20px;
+      border-bottom: 1px solid #e8dcc8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: #5c4033;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #8b7355;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-field {
+      margin-bottom: 16px;
+    }
+
+    .modal-label {
+      display: block;
+      font-weight: 500;
+      color: #5c4033;
+      margin-bottom: 8px;
+    }
+
+    .modal-select,
+    .modal-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #d4c4a8;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      background: white;
+    }
+
+    .modal-textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .modal-helper {
+      font-size: 0.8rem;
+      color: #8b7355;
+      margin-top: 4px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .modal-btn-secondary,
+    .modal-btn-primary {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .modal-btn-secondary {
+      background: #f5efe3;
+      color: #5c4033;
+    }
+
+    .modal-btn-primary {
+      background: #228b22;
+      color: white;
+    }
+
+    .proof-image {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    /* Print Styles */
+    .print-container {
+      display: none;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      .print-container,
+      .print-container * {
+        visibility: visible;
+      }
+
+      .print-container {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80mm;
+        padding: 10px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+      }
+
+      .print-header {
+        text-align: center;
+        border-bottom: 1px dashed #000;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+      }
+
+      .print-logo {
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .print-info {
+        margin-bottom: 10px;
+      }
+
+      .print-items {
+        border-top: 1px dashed #000;
+        padding: 10px 0;
+      }
+
+      .print-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .print-total {
+        font-size: 12px;
+        text-align: right;
+        border-top: 1px dashed #000;
+        padding-top: 10px;
+        margin-top: 10px;
+      }
+
+      .print-footer {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 11px;
+      }
+
+      /* Kitchen Print - No prices */
+      .print-container.kitchen .print-total {
+        display: none;
+      }
+
+      .print-container.kitchen .print-item {
+        justify-content: flex-start;
+      }
+
+      .print-container.kitchen .print-item .item-price {
+        display: none;
+      }
+
+      .print-container.kitchen .print-note {
+        font-style: italic;
+        color: #666;
+        margin-left: 10px;
+        font-size: 11px;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px;
+      }
+
+      .kasir-header {
+        padding: 16px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .kasir-title {
+        font-size: 1.25rem;
+      }
+
+      .header-actions {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .dashboard-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .stat-card {
+        padding: 12px 8px;
+      }
+
+      .stat-number {
+        font-size: 1.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.65rem;
+        line-height: 1.2;
+      }
+
+      .kasir-tabs {
+        gap: 6px;
+      }
+
+      .kasir-tab {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+      }
+
+      .order-header {
+        padding: 12px 16px;
+      }
+
+      .order-body {
+        padding: 16px;
+      }
+
+      .order-actions {
+        flex-direction: column;
+      }
+
+      .btn-action {
+        min-width: 100%;
+      }
+
+      .order-id {
+        font-size: 0.9rem;
+      }
+
+      .order-time {
+        font-size: 0.75rem;
+      }
+
+      .order-meta {
+        gap: 10px;
+      }
+
+      .meta-item {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 8px;
+      }
+
+      .dashboard-stats {
+        gap: 6px;
+      }
+
+      .stat-card {
+        padding: 10px 6px;
+      }
+
+      .stat-number {
+        font-size: 1.25rem;
+      }
+
+      .stat-label {
+        font-size: 0.6rem;
+      }
+
+      .order-card {
+        border-radius: 10px;
+      }
+
+      .order-header {
+        padding: 10px 12px;
+      }
+
+      .order-body {
+        padding: 12px;
+      }
+
+      .order-total {
+        padding: 12px;
+      }
+
+      .total-amount {
+        font-size: 1.1rem;
+      }
+
+      .payment-info {
+        padding: 10px 12px;
+      }
+
+      .method-badge,
+      .status-badge {
+        padding: 3px 10px;
+        font-size: 0.7rem;
+      }
+
+      .btn-action {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Notification sound indicator */
+    .notification-badge {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #e65c00;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(230, 92, 0, 0.4);
+      z-index: 999;
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+
+    .notification-badge.show {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Login Section -->
+  <div class="login-container" id="loginSection">
+    <div class="login-box">
+      <h1 class="login-title">Kasir Panel</h1>
+      <p class="login-subtitle">Ogi Family - Kuliner Khas Bugis</p>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-input" id="username" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary" id="loginBtn">
+          Masuk
+        </button>
+        <p class="error-msg" id="loginError"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Kasir Panel -->
+  <div class="kasir-panel" id="kasirPanel">
+    <div class="container">
+      <!-- Header -->
+      <div class="kasir-header">
+        <h1 class="kasir-title">Kasir Panel</h1>
+        <div class="header-actions">
+          <button class="btn-refresh" onclick="refreshOrders()" id="refreshBtn">
+            <span class="refresh-icon">&#8635;</span>
+            Refresh
+          </button>
+          <button class="btn-logout" onclick="handleLogout()">Logout</button>
+        </div>
+      </div>
+
+      <!-- Dashboard Stats -->
+      <div class="dashboard-stats">
+        <div class="stat-card pending">
+          <div class="stat-number" id="pendingCount">0</div>
+          <div class="stat-label">Menunggu Pembayaran</div>
+        </div>
+        <div class="stat-card confirmed">
+          <div class="stat-number" id="confirmedCount">0</div>
+          <div class="stat-label">Dikonfirmasi</div>
+        </div>
+        <div class="stat-card completed">
+          <div class="stat-number" id="completedCount">0</div>
+          <div class="stat-label">Selesai</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="kasir-tabs">
+        <button class="kasir-tab active" data-tab="pending" onclick="switchTab('pending')">
+          Pesanan Baru
+          <span class="tab-badge" id="pendingBadge">0</span>
+        </button>
+        <button class="kasir-tab" data-tab="confirmed" onclick="switchTab('confirmed')">
+          Dikonfirmasi
+        </button>
+        <button class="kasir-tab" data-tab="completed" onclick="switchTab('completed')">
+          Selesai
+        </button>
+      </div>
+
+      <!-- Orders Container -->
+      <div class="orders-container" id="ordersContainer">
+        <div class="loading-state">
+          <div class="loading-spinner"></div>
+          <p>Memuat pesanan...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Badge -->
+  <div class="notification-badge" id="notificationBadge">
+    <span>&#128276;</span>
+    <span>Pesanan baru!</span>
+  </div>
+
+  <!-- Modal for Payment Proof -->
+  <div class="modal-overlay" id="proofModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Bukti Transfer</h3>
+        <button class="modal-close" onclick="closeProofModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img src="" alt="Bukti Transfer" class="proof-image" id="proofImage">
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Manual Confirmation with Notes -->
+  <div class="modal-overlay" id="confirmNoteModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Konfirmasi Pembayaran Manual</h3>
+        <button class="modal-close" onclick="closeConfirmNoteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; color: #5c4033;">
+          <strong>Order ID:</strong> <span id="confirmOrderId"></span>
+        </p>
+        <div class="modal-field">
+          <label class="modal-label">Metode Pembayaran Aktual untuk Catatan</label>
+          <select id="confirmPaymentCategory" class="modal-select">
+            <option value="">Pilih jika ingin dicatat</option>
+            <option value="CASH">Cash</option>
+            <option value="QRIS">Qris</option>
+            <option value="DEBIT CARD">Debit Card</option>
+          </select>
+          <p class="modal-helper">Ini hanya menambah catatan evaluasi kasir, tidak mengubah metode resmi order.</p>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Catatan Kasir (opsional)</label>
+          <textarea id="confirmNote" class="modal-textarea"
+            placeholder="Contoh: Pelanggan mengubah pembayaran dari QRIS ke Cash, Pembayaran diterima tunai, dll."></textarea>
+          <p class="modal-helper">
+            Catatan ini akan disimpan untuk referensi dan laporan.
+          </p>
+        </div>
+        <div class="modal-actions">
+          <button onclick="closeConfirmNoteModal()" class="modal-btn-secondary">
+            Batal
+          </button>
+          <button onclick="submitConfirmWithNote()" class="modal-btn-primary">
+            Konfirmasi Pembayaran
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="changePaymentMethodModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Ubah Metode Pembayaran</h3>
+        <button class="modal-close" onclick="closeChangePaymentMethodModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; color: #5c4033;">
+          <strong>Order ID:</strong> <span id="changePaymentOrderId"></span>
+        </p>
+        <div class="modal-field">
+          <label class="modal-label">Metode Pembayaran Baru</label>
+          <select id="newPaymentMethod" class="modal-select">
+            <option value="CASH">Cash</option>
+            <option value="QRIS">Qris</option>
+            <option value="DEBIT CARD">Debit Card</option>
+          </select>
+          <p class="modal-helper" id="changePaymentMethodHelper">Total order akan dihitung ulang otomatis jika ada fee QRIS.</p>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Catatan Perubahan (opsional)</label>
+          <textarea id="changePaymentNote" class="modal-textarea"
+            placeholder="Contoh: Pelanggan minta pindah dari cash ke QRIS saat di kasir."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button onclick="closeChangePaymentMethodModal()" class="modal-btn-secondary">
+            Batal
+          </button>
+          <button onclick="submitChangePaymentMethod()" class="modal-btn-primary">
+            Simpan Perubahan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print Container (hidden, used for printing) -->
+  <div class="print-container" id="printContainer">
+    <div class="print-header">
+      <div class="print-logo">OGI FAMILY</div>
+      <div>Kuliner Khas Bugis Sulawesi Selatan</div>
+    </div>
+    <div class="print-info" id="printInfo"></div>
+    <div class="print-items" id="printItems"></div>
+    <div class="print-total" id="printTotal"></div>
+    <div class="print-footer">
+      <div>Terima Kasih</div>
+      <div>Selamat Menikmati!</div>
+    </div>
+  </div>
+
+  <!-- Audio for notification -->
+  <audio id="notificationSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    (function () {
+      var hasNativeAppsScript = !!(window.google && window.google.script && window.google.script.run);
+      if (!hasNativeAppsScript) {
+        document.write('<script src="./config.js"><\/script>');
+        document.write('<script src="./runtime-bridge.js"><\/script>');
+      }
+    })();
+  </script>
+  <script>
+    // State
+    let currentUser = null;
+    let currentTab = 'pending';
+    let orders = [];
+    let previousPendingCount = 0;
+    let autoRefreshInterval = null;
+    const KASIR_RPC_METHODS = [
+      'verifyKasirLogin',
+      'getOrders',
+      'updateOrderStatusWithNote',
+      'updateOrderPaymentMethod',
+      'updateOrderStatus',
+      'createMidtransTransaction'
+    ];
+
+    if (window.OgiRuntimeBridge) {
+      window.OgiRuntimeBridge.installGoogleScriptRunShim({
+        pageName: 'kasir',
+        methods: KASIR_RPC_METHODS
+      });
+    }
+
+    // Login handling
+    function handleLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const loginBtn = document.getElementById('loginBtn');
+      const errorMsg = document.getElementById('loginError');
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Memproses...';
+      errorMsg.classList.remove('show');
+
+      google.script.run
+        .withSuccessHandler(function (result) {
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Masuk';
+
+          if (result.success) {
+            currentUser = username;
+            sessionStorage.setItem('kasirUser', username);
+            showKasirPanel();
+          } else {
+            errorMsg.textContent = result.message;
+            errorMsg.classList.add('show');
+          }
+        })
+        .withFailureHandler(function (error) {
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Masuk';
+          errorMsg.textContent = 'Terjadi kesalahan. Coba lagi.';
+          errorMsg.classList.add('show');
+        })
+        .verifyKasirLogin(username, password);
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      sessionStorage.removeItem('kasirUser');
+      clearInterval(autoRefreshInterval);
+      document.getElementById('loginSection').style.display = 'flex';
+      document.getElementById('kasirPanel').classList.remove('active');
+    }
+
+    function showKasirPanel() {
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('kasirPanel').classList.add('active');
+      loadOrders();
+      clearInterval(autoRefreshInterval);
+
+      // Auto refresh every 30 seconds
+      autoRefreshInterval = setInterval(() => {
+        loadOrders();
+      }, 30000);
+    }
+
+    // Check session on load
+    document.addEventListener('DOMContentLoaded', function () {
+      const savedUser = sessionStorage.getItem('kasirUser');
+      if (savedUser) {
+        currentUser = savedUser;
+        showKasirPanel();
+      }
+    });
+
+    function updateOrderStatsFromOrders() {
+      const counts = {
+        pending: 0,
+        waitingPayment: 0,
+        confirmed: 0,
+        completed: 0
+      };
+
+      orders.forEach(function (order) {
+        const status = order.paymentStatus || 'Bayar di Kasir';
+        if (
+          status === 'Bayar di Kasir' ||
+          status === 'Menunggu Verifikasi' ||
+          status === 'Menunggu Pembayaran' ||
+          status === 'Lunas'
+        ) {
+          counts.pending++;
+        }
+
+        if (status === 'Menunggu Pembayaran') {
+          counts.waitingPayment++;
+        } else if (status === 'Pembayaran Dikonfirmasi') {
+          counts.confirmed++;
+        } else if (status === 'Selesai') {
+          counts.completed++;
+        }
+      });
+
+      document.getElementById('pendingCount').textContent = counts.waitingPayment;
+      document.getElementById('confirmedCount').textContent = counts.confirmed;
+      document.getElementById('completedCount').textContent = counts.completed;
+      document.getElementById('pendingBadge').textContent = counts.pending;
+
+      if (counts.pending > previousPendingCount && previousPendingCount > 0) {
+        playNotification();
+      }
+      previousPendingCount = counts.pending;
+    }
+
+    // Load orders
+    function loadOrders() {
+      const container = document.getElementById('ordersContainer');
+      container.innerHTML = `
+        <div class="loading-state">
+          <div class="loading-spinner"></div>
+          <p>Memuat pesanan...</p>
+        </div>
+      `;
+
+      google.script.run
+        .withSuccessHandler(function (result) {
+          if (result.success) {
+            orders = result.data || [];
+            updateOrderStatsFromOrders();
+            renderOrders();
+          } else {
+            container.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon">&#9888;</div>
+                <h3 class="empty-title">Gagal memuat pesanan</h3>
+                <p class="empty-text">${result.error || 'Terjadi kesalahan'}</p>
+              </div>
+            `;
+          }
+        })
+        .withFailureHandler(function (error) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">&#9888;</div>
+              <h3 class="empty-title">Gagal memuat pesanan</h3>
+              <p class="empty-text">Terjadi kesalahan koneksi</p>
+            </div>
+          `;
+        })
+        .getOrders(null);
+    }
+
+    function playNotification() {
+      const audio = document.getElementById('notificationSound');
+      const badge = document.getElementById('notificationBadge');
+
+      audio.play().catch(() => { });
+      badge.classList.add('show');
+
+      setTimeout(() => {
+        badge.classList.remove('show');
+      }, 3000);
+    }
+
+    function refreshOrders() {
+      const btn = document.getElementById('refreshBtn');
+      btn.classList.add('loading');
+
+      loadOrders();
+
+      setTimeout(() => {
+        btn.classList.remove('loading');
+      }, 1000);
+    }
+
+    // Tab switching
+    function switchTab(tab) {
+      currentTab = tab;
+
+      document.querySelectorAll('.kasir-tab').forEach(t => {
+        t.classList.remove('active');
+        if (t.dataset.tab === tab) {
+          t.classList.add('active');
+        }
+      });
+
+      renderOrders();
+    }
+
+    // Render orders
+    function renderOrders() {
+      const container = document.getElementById('ordersContainer');
+
+      console.log('[v0] Rendering orders for tab:', currentTab, 'Total orders:', orders.length);
+
+      // Filter orders based on current tab
+      let filteredOrders = [];
+      if (currentTab === 'pending') {
+        // Include all pending statuses including 'Lunas' from old QRIS orders
+        filteredOrders = orders.filter(o =>
+          o.paymentStatus === 'Bayar di Kasir' ||
+          o.paymentStatus === 'Menunggu Verifikasi' ||
+          o.paymentStatus === 'Menunggu Pembayaran' ||
+          o.paymentStatus === 'Lunas'
+        );
+      } else if (currentTab === 'confirmed') {
+        filteredOrders = orders.filter(o => o.paymentStatus === 'Pembayaran Dikonfirmasi');
+      } else {
+        filteredOrders = orders.filter(o => o.paymentStatus === 'Selesai');
+      }
+
+      console.log('[v0] Filtered orders:', filteredOrders.length);
+
+      if (filteredOrders.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">${currentTab === 'pending' ? '&#128230;' : currentTab === 'confirmed' ? '&#128203;' : '&#9989;'}</div>
+            <h3 class="empty-title">Tidak ada pesanan</h3>
+            <p class="empty-text">${currentTab === 'pending' ? 'Belum ada pesanan baru yang masuk' :
+            currentTab === 'confirmed' ? 'Tidak ada pesanan yang dikonfirmasi' :
+              'Tidak ada pesanan yang selesai'
+          }</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      filteredOrders.forEach(order => {
+        html += renderOrderCard(order);
+      });
+
+      container.innerHTML = html;
+    }
+
+    function getOrderTypeMeta(orderType) {
+      const value = String(orderType || 'dine_in').trim();
+      if (value === 'takeaway') {
+        return { label: 'Take away', locationLabel: 'No HP' };
+      }
+      if (value === 'delivery') {
+        return { label: 'Delivery', locationLabel: 'No HP' };
+      }
+      return { label: 'Dine in', locationLabel: 'Meja' };
+    }
+
+    function getOrderLocationDisplay(order) {
+      const current = order || {};
+      const meta = getOrderTypeMeta(current.orderType);
+      return {
+        typeLabel: meta.label,
+        locationLabel: meta.locationLabel,
+        locationValue: String(current.nomorMeja || '').trim() || '-',
+        deliveryAddress: String(current.deliveryAddress || '').trim()
+      };
+    }
+
+    function renderOrderCard(order) {
+      const paymentMethod = normalizePaymentMethod(order.paymentMethod);
+      const orderMeta = getOrderLocationDisplay(order);
+      const isQris = paymentMethod === 'QRIS';
+      const isPending = order.paymentStatus === 'Bayar di Kasir' ||
+        order.paymentStatus === 'Menunggu Verifikasi' ||
+        order.paymentStatus === 'Menunggu Pembayaran' ||
+        order.paymentStatus === 'Lunas';
+      const isConfirmed = order.paymentStatus === 'Pembayaran Dikonfirmasi';
+      const isCompleted = order.paymentStatus === 'Selesai';
+
+      let itemsHtml = '';
+      order.items.forEach(item => {
+        const variant = item.variant || item.note || '';
+        itemsHtml += `
+          <div class="order-item">
+            <div>
+              <span class="item-name">${item.name}</span>
+              <span class="item-qty"> x${item.qty}</span>
+              ${variant ? `<div style="font-size: 0.78rem; color: #8b7355; margin-top: 4px;">Varian: ${escapeHtml(variant)}</div>` : ''}
+            </div>
+            <span class="item-price">Rp ${formatNumber(item.subtotal)}</span>
+          </div>
+        `;
+      });
+
+      let actionsHtml = '';
+      if (isPending) {
+        // Show QRIS payment button for QRIS orders
+        if (isQris) {
+          actionsHtml = `
+            <button class="btn-action btn-qris" onclick="processQrisPayment('${order.orderId}')">
+              <span>&#128179;</span> Bayar QRIS Midtrans
+            </button>
+            <button class="btn-action btn-confirm" onclick="confirmPayment('${order.orderId}')">
+              <span>&#10003;</span> Konfirmasi Manual
+            </button>
+            <button class="btn-action btn-method" onclick="openChangePaymentMethodModal('${order.orderId}')">
+              <span>&#8646;</span> Ubah Metode
+            </button>
+          `;
+        } else {
+          actionsHtml = `
+            <button class="btn-action btn-confirm" onclick="confirmPayment('${order.orderId}')">
+              <span>&#10003;</span> Konfirmasi Pembayaran
+            </button>
+            <button class="btn-action btn-method" onclick="openChangePaymentMethodModal('${order.orderId}')">
+              <span>&#8646;</span> Ubah Metode
+            </button>
+          `;
+        }
+      } else if (isConfirmed) {
+        actionsHtml = `
+          <button class="btn-action btn-kitchen" onclick="printKitchenReceipt('${order.orderId}')">
+            <span>&#127859;</span> Cetak Struk Dapur
+          </button>
+          <button class="btn-action btn-print" onclick="printReceipt('${order.orderId}')">
+            <span>&#128424;</span> Cetak Struk
+          </button>
+          <button class="btn-action btn-complete" onclick="completeOrder('${order.orderId}')">
+            <span>&#10003;</span> Selesai
+          </button>
+        `;
+      } else {
+        actionsHtml = `
+          <button class="btn-action btn-print" onclick="printReceipt('${order.orderId}')">
+            <span>&#128424;</span> Cetak Struk
+          </button>
+        `;
+      }
+
+      return `
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-info">
+              <div class="order-id">${order.orderId}</div>
+              <div class="order-time">${formatOrderTimestamp(order.timestamp)}</div>
+            </div>
+            <div class="order-meta">
+              <div class="meta-item">
+                <span class="meta-icon">&#127829;</span>
+                <span class="meta-value">${orderMeta.typeLabel}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">&#128100;</span>
+                <span class="meta-value">${order.namaCustomer}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-icon">&#128222;</span>
+                <span class="meta-value">${orderMeta.locationLabel} ${escapeHtml(orderMeta.locationValue)}</span>
+              </div>
+            </div>
+          </div>
+          ${orderMeta.deliveryAddress ? `
+            <div style="background: #faf8f5; border: 1px solid #e8dcc8; border-radius: 10px; padding: 10px 14px; margin: 0 20px 14px; color: #5c4033; font-size: 0.85rem;">
+              <strong>Alamat Pengiriman:</strong><br>${escapeHtml(orderMeta.deliveryAddress)}
+            </div>
+          ` : ''}
+          <div class="order-body">
+            <div class="order-items">
+              ${itemsHtml}
+            </div>
+            ${renderOrderSummary(order)}
+            <div class="payment-info">
+              <div class="payment-method">
+                <span class="method-badge ${getPaymentMethodBadgeClass(paymentMethod)}">
+                  ${paymentMethod}
+                </span>
+                <span class="status-badge ${isPending ? 'status-pending' :
+          isConfirmed ? 'status-confirmed' : 'status-completed'
+        }">
+                  ${order.paymentStatus}
+                </span>
+              </div>
+              ${isQris && order.proofUrl ? `
+                <button class="btn-view-proof" onclick="viewProof('${order.proofUrl}')">
+                  Lihat Bukti Transfer
+                </button>
+              ` : ''}
+            </div>
+            ${order.cashierNote ? `
+              <div style="background: #fff8e7; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid #e65c00;">
+                <div style="font-size: 0.75rem; color: #8b7355; margin-bottom: 4px;">Catatan Kasir:</div>
+                <div style="font-size: 0.85rem; color: #3d2a1a;">${formatCashierNote(order.cashierNote)}</div>
+              </div>
+            ` : ''}
+            <div class="order-actions">
+              ${actionsHtml}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // State for confirm modal
+    let pendingConfirmOrderId = null;
+    let pendingChangePaymentOrderId = null;
+
+    // Actions
+    function confirmPayment(orderId) {
+      // Open modal for adding notes
+      pendingConfirmOrderId = orderId;
+      document.getElementById('confirmOrderId').textContent = orderId;
+      document.getElementById('confirmPaymentCategory').value = '';
+      document.getElementById('confirmNote').value = '';
+      document.getElementById('confirmNoteModal').classList.add('active');
+    }
+
+    function closeConfirmNoteModal() {
+      document.getElementById('confirmNoteModal').classList.remove('active');
+      pendingConfirmOrderId = null;
+    }
+
+    function submitConfirmWithNote() {
+      if (!pendingConfirmOrderId) return;
+
+      const selectedMethod = document.getElementById('confirmPaymentCategory').value;
+      const freeNote = document.getElementById('confirmNote').value.trim();
+      const orderId = pendingConfirmOrderId;
+      let noteParts = [];
+
+      if (selectedMethod) {
+        noteParts.push('Metode aktual kasir: ' + selectedMethod);
+      }
+      if (freeNote) {
+        noteParts.push(freeNote);
+      }
+
+      const note = noteParts.join(' | ');
+
+      closeConfirmNoteModal();
+
+      google.script.run
+        .withSuccessHandler(function (result) {
+          if (result.success) {
+            alert('Pembayaran dikonfirmasi! Pesanan siap diteruskan ke dapur.');
+            loadOrders();
+          } else {
+            alert('Gagal: ' + result.error);
+          }
+        })
+        .withFailureHandler(function (error) {
+          alert('Terjadi kesalahan: ' + error);
+        })
+        .updateOrderStatusWithNote(orderId, 'Pembayaran Dikonfirmasi', note);
+    }
+
+    function openChangePaymentMethodModal(orderId) {
+      const order = orders.find(o => o.orderId === orderId);
+      if (!order) return;
+
+      const paymentSelect = document.getElementById('newPaymentMethod');
+      const helper = document.getElementById('changePaymentMethodHelper');
+      const isTakeaway = String(order.orderType || '').trim() === 'takeaway';
+
+      pendingChangePaymentOrderId = orderId;
+      document.getElementById('changePaymentOrderId').textContent = orderId;
+      Array.from(paymentSelect.options).forEach(function(option) {
+        option.disabled = isTakeaway && option.value !== 'QRIS';
+      });
+      paymentSelect.value = isTakeaway ? 'QRIS' : normalizePaymentMethod(order.paymentMethod);
+      helper.textContent = isTakeaway
+        ? 'Pesanan take away hanya bisa menggunakan QRIS.'
+        : 'Total order akan dihitung ulang otomatis jika ada fee QRIS.';
+      document.getElementById('changePaymentNote').value = '';
+      document.getElementById('changePaymentMethodModal').classList.add('active');
+    }
+
+    function closeChangePaymentMethodModal() {
+      document.getElementById('changePaymentMethodModal').classList.remove('active');
+      pendingChangePaymentOrderId = null;
+    }
+
+    function submitChangePaymentMethod() {
+      if (!pendingChangePaymentOrderId) return;
+
+      const orderId = pendingChangePaymentOrderId;
+      const order = orders.find(o => o.orderId === orderId);
+      const newPaymentMethod = document.getElementById('newPaymentMethod').value;
+      const note = document.getElementById('changePaymentNote').value.trim();
+
+      if (order && String(order.orderType || '').trim() === 'takeaway' && newPaymentMethod !== 'QRIS') {
+        alert('Pesanan take away hanya bisa menggunakan QRIS.');
+        return;
+      }
+
+      closeChangePaymentMethodModal();
+
+      google.script.run
+        .withSuccessHandler(function (result) {
+          if (result.success) {
+            alert('Metode pembayaran berhasil diperbarui.');
+            loadOrders();
+          } else {
+            alert('Gagal: ' + result.error);
+          }
+        })
+        .withFailureHandler(function (error) {
+          alert('Terjadi kesalahan: ' + error);
+        })
+        .updateOrderPaymentMethod(orderId, newPaymentMethod, note);
+    }
+
+    function completeOrder(orderId) {
+      if (!confirm('Tandai pesanan ini sebagai selesai?')) return;
+
+      google.script.run
+        .withSuccessHandler(function (result) {
+          if (result.success) {
+            alert('Pesanan selesai!');
+            loadOrders();
+          } else {
+            alert('Gagal: ' + result.error);
+          }
+        })
+        .withFailureHandler(function (error) {
+          alert('Terjadi kesalahan: ' + error);
+        })
+        .updateOrderStatus(orderId, 'Selesai');
+    }
+
+    function viewProof(url) {
+      const modal = document.getElementById('proofModal');
+      const img = document.getElementById('proofImage');
+      img.src = url;
+      modal.classList.add('active');
+    }
+
+    function closeProofModal() {
+      document.getElementById('proofModal').classList.remove('active');
+    }
+
+    // Process QRIS Payment via Midtrans
+    function processQrisPayment(orderId) {
+      const order = orders.find(o => o.orderId === orderId);
+      if (!order) return;
+
+      // Show loading
+      const btn = event.target.closest('button');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span>&#8987;</span> Memproses...';
+
+      // Call backend to create Midtrans transaction
+      google.script.run
+        .withSuccessHandler(function (result) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+
+          if (result.success && result.token) {
+            // Open Midtrans Snap popup
+            snap.pay(result.token, {
+              onSuccess: function (result) {
+                console.log('[v0] Payment success:', result);
+                alert('Pembayaran berhasil!');
+                // Auto confirm payment after successful QRIS
+                confirmPaymentAfterQris(orderId);
+              },
+              onPending: function (result) {
+                console.log('[v0] Payment pending:', result);
+                alert('Pembayaran pending. Silakan cek status pembayaran.');
+              },
+              onError: function (result) {
+                console.log('[v0] Payment error:', result);
+                alert('Pembayaran gagal. Silakan coba lagi.');
+              },
+              onClose: function () {
+                console.log('[v0] Customer closed the popup without finishing payment');
+              }
+            });
+          } else {
+            alert('Gagal membuat transaksi: ' + (result.error || 'Unknown error'));
+          }
+        })
+        .withFailureHandler(function (error) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+          alert('Terjadi kesalahan: ' + error);
+        })
+        .createMidtransTransaction(order);
+    }
+
+    // Auto confirm after successful QRIS payment
+    function confirmPaymentAfterQris(orderId) {
+      google.script.run
+        .withSuccessHandler(function (result) {
+          if (result.success) {
+            loadOrders();
+          }
+        })
+        .updateOrderStatus(orderId, 'Pembayaran Dikonfirmasi');
+    }
+
+    // Print kitchen receipt (without prices)
+    function printKitchenReceipt(orderId) {
+      const order = orders.find(o => o.orderId === orderId);
+      if (!order) return;
+
+      const printContainer = document.getElementById('printContainer');
+      printContainer.classList.add('kitchen');
+      const orderMeta = getOrderLocationDisplay(order);
+
+      // Fill print container for kitchen - use current Singapore time
+      const kitchenPrintTime = getSingaporeTime();
+      document.getElementById('printInfo').innerHTML = `
+        <div style="font-weight: bold; font-size: 14px;">STRUK DAPUR</div>
+        <div>No: ${order.orderId}</div>
+        <div>Tanggal: ${kitchenPrintTime}</div>
+        <div>Tipe: ${orderMeta.typeLabel}</div>
+        <div>${orderMeta.locationLabel}: ${orderMeta.locationValue}</div>
+        <div>Customer: ${order.namaCustomer}</div>
+        ${orderMeta.deliveryAddress ? `<div>Alamat: ${escapeHtml(orderMeta.deliveryAddress)}</div>` : ''}
+      `;
+
+      let itemsHtml = '';
+      order.items.forEach(item => {
+        const variant = item.variant || item.note || '';
+        itemsHtml += `
+          <div class="print-item" style="flex-direction: column; margin-bottom: 8px;">
+            <span style="font-weight: bold;">${item.qty}x ${item.name}</span>
+            ${variant ? `<span class="print-note">Varian: ${variant}</span>` : ''}
+          </div>
+        `;
+      });
+      document.getElementById('printItems').innerHTML = itemsHtml;
+
+      // Hide total for kitchen receipt
+      document.getElementById('printTotal').innerHTML = '';
+
+      window.print();
+
+      // Reset class after print
+      setTimeout(() => {
+        printContainer.classList.remove('kitchen');
+      }, 500);
+    }
+
+    // Print receipt (with prices - for customer)
+    function printReceipt(orderId) {
+      const order = orders.find(o => o.orderId === orderId);
+      if (!order) return;
+
+      const printContainer = document.getElementById('printContainer');
+      printContainer.classList.remove('kitchen');
+      const orderMeta = getOrderLocationDisplay(order);
+
+      // Fill print container - use current Singapore time for print timestamp
+      const printTime = getSingaporeTime();
+      document.getElementById('printInfo').innerHTML = `
+        <div>No: ${order.orderId}</div>
+        <div>Tanggal: ${printTime}</div>
+        <div>Tipe: ${orderMeta.typeLabel}</div>
+        <div>${orderMeta.locationLabel}: ${orderMeta.locationValue}</div>
+        <div>Customer: ${order.namaCustomer}</div>
+        ${orderMeta.deliveryAddress ? `<div>Alamat: ${escapeHtml(orderMeta.deliveryAddress)}</div>` : ''}
+        <div>Bayar: ${order.paymentMethod}</div>
+      `;
+
+      let itemsHtml = '';
+      order.items.forEach(item => {
+        const variant = item.variant || item.note || '';
+        itemsHtml += `
+          <div class="print-item" style="flex-direction: column; align-items: stretch;">
+            <div style="display: flex; justify-content: space-between; gap: 8px;">
+              <span>${item.qty}x ${item.name}</span>
+              <span>Rp ${formatNumber(item.subtotal)}</span>
+            </div>
+            ${variant ? `<span class="print-note">Varian: ${variant}</span>` : ''}
+          </div>
+        `;
+      });
+      document.getElementById('printItems').innerHTML = itemsHtml;
+
+      // Build total section with fees
+      let totalHtml = '';
+      const fees = order.fees || {};
+      const hasFees = fees.tax > 0 || fees.discount > 0 || fees.deliveryFee > 0 || fees.qrisFee > 0;
+
+      if (hasFees) {
+        totalHtml += `<div style="display: flex; justify-content: space-between;"><span>Subtotal</span><span>Rp ${formatNumber(order.subtotal || 0)}</span></div>`;
+        if (fees.tax > 0) {
+          totalHtml += `<div style="display: flex; justify-content: space-between;"><span>${fees.taxLabel || 'Pajak'}</span><span>+ Rp ${formatNumber(fees.tax)}</span></div>`;
+        }
+        if (fees.discount > 0) {
+          totalHtml += `<div style="display: flex; justify-content: space-between;"><span>${fees.discountLabel || 'Diskon'}</span><span>- Rp ${formatNumber(fees.discount)}</span></div>`;
+        }
+        if (fees.deliveryFee > 0) {
+          totalHtml += `<div style="display: flex; justify-content: space-between;"><span>${fees.deliveryFeeLabel || 'Ongkir Delivery'}</span><span>+ Rp ${formatNumber(fees.deliveryFee)}</span></div>`;
+        }
+        if (fees.qrisFee > 0) {
+          totalHtml += `<div style="display: flex; justify-content: space-between;"><span>${fees.qrisFeeLabel || 'Fee QRIS'}</span><span>+ Rp ${formatNumber(fees.qrisFee)}</span></div>`;
+        }
+      }
+      totalHtml += `<div style="font-weight: bold; font-size: 14px; margin-top: 8px; border-top: 1px dashed #000; padding-top: 8px;">TOTAL: Rp ${formatNumber(order.totalPrice)}</div>`;
+
+      document.getElementById('printTotal').innerHTML = totalHtml;
+
+      window.print();
+    }
+
+    // Utility
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function normalizePaymentMethod(method) {
+      const value = String(method || '').toUpperCase().trim();
+      if (value === 'QRIS') return 'QRIS';
+      if (value === 'DEBIT' || value === 'DEBIT CARD') return 'DEBIT CARD';
+      return 'CASH';
+    }
+
+    function getPaymentMethodBadgeClass(method) {
+      if (method === 'QRIS') return 'method-qris';
+      if (method === 'DEBIT CARD') return 'method-debit';
+      return 'method-cash';
+    }
+
+    function formatOrderTimestamp(timestamp) {
+      if (!timestamp) return '-';
+
+      if (typeof timestamp === 'string' && /^\d{2}\/\d{2}\/\d{4}\s\d{2}:\d{2}(:\d{2})?$/.test(timestamp)) {
+        return timestamp;
+      }
+
+      const parsed = new Date(timestamp);
+      if (Number.isNaN(parsed.getTime())) return String(timestamp);
+
+      return parsed.toLocaleString('id-ID', {
+        timeZone: 'Asia/Singapore',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatCashierNote(note) {
+      return escapeHtml(note).replace(/\n/g, '<br>');
+    }
+
+    // Get current Singapore time for printing
+    function getSingaporeTime() {
+      return new Date().toLocaleString('id-ID', {
+        timeZone: 'Asia/Singapore',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+    }
+
+    // Render order summary with fees
+    function renderOrderSummary(order) {
+      let html = '<div class="order-summary">';
+
+      // Check if order has fees data
+      const hasFees = order.fees && (order.fees.tax > 0 || order.fees.discount > 0 || order.fees.deliveryFee > 0 || order.fees.qrisFee > 0);
+
+      if (hasFees) {
+        // Show subtotal
+        html += `<div class="order-summary-row subtotal">
+          <span class="summary-label">Subtotal</span>
+          <span class="summary-value">Rp ${formatNumber(order.subtotal || order.totalPrice)}</span>
+        </div>`;
+
+        // Show tax if applicable
+        if (order.fees.tax > 0) {
+          html += `<div class="order-summary-row fee">
+            <span class="summary-label">${order.fees.taxLabel || 'Pajak'}</span>
+            <span class="summary-value">+ Rp ${formatNumber(order.fees.tax)}</span>
+          </div>`;
+        }
+
+        // Show discount if applicable
+        if (order.fees.discount > 0) {
+          html += `<div class="order-summary-row discount">
+            <span class="summary-label">${order.fees.discountLabel || 'Diskon'}</span>
+            <span class="summary-value">- Rp ${formatNumber(order.fees.discount)}</span>
+          </div>`;
+        }
+
+        // Show delivery fee if applicable
+        if (order.fees.deliveryFee > 0) {
+          html += `<div class="order-summary-row fee">
+            <span class="summary-label">${order.fees.deliveryFeeLabel || 'Ongkir Delivery'}</span>
+            <span class="summary-value">+ Rp ${formatNumber(order.fees.deliveryFee)}</span>
+          </div>`;
+        }
+
+        // Show QRIS fee if applicable
+        if (order.fees.qrisFee > 0) {
+          html += `<div class="order-summary-row qris-fee">
+            <span class="summary-label">${order.fees.qrisFeeLabel || 'Fee QRIS'}</span>
+            <span class="summary-value">+ Rp ${formatNumber(order.fees.qrisFee)}</span>
+          </div>`;
+        }
+
+        // Show total
+        html += `<div class="order-summary-row total">
+          <span class="summary-label">Total</span>
+          <span class="summary-value">Rp ${formatNumber(order.totalPrice)}</span>
+        </div>`;
+      } else {
+        // Simple total (for old orders without fees)
+        html += `<div class="order-summary-row total" style="border-top: none; margin-top: 0; padding-top: 0;">
+          <span class="summary-label">Total</span>
+          <span class="summary-value">Rp ${formatNumber(order.totalPrice)}</span>
+        </div>`;
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    // Close modal on outside click
+    document.getElementById('proofModal').addEventListener('click', function (e) {
+      if (e.target === this) {
+        closeProofModal();
+      }
+    });
+
+    document.getElementById('confirmNoteModal').addEventListener('click', function (e) {
+      if (e.target === this) {
+        closeConfirmNoteModal();
+      }
+    });
+
+    document.getElementById('changePaymentMethodModal').addEventListener('click', function (e) {
+      if (e.target === this) {
+        closeChangePaymentMethodModal();
+      }
+    });
+  </script>
+</body>
+
+</html>
