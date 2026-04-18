@@ -644,17 +644,6 @@ function buildApiUrl(action, params) {
   return base + sep + pairs.join('&');
 }
 
-function parseApiJsonResponse(resp) {
-  return resp.text().then(function(text) {
-    if (!text) return {};
-    try {
-      return JSON.parse(text);
-    } catch (err) {
-      throw new Error('Respons API tidak valid');
-    }
-  });
-}
-
 function callServerFunction(name, args) {
   args = args || [];
   return new Promise(function(resolve, reject) {
@@ -671,16 +660,64 @@ function callServerFunction(name, args) {
   });
 }
 
+function createJsonpRequest(action, params) {
+  return new Promise(function(resolve, reject) {
+    var callbackName = '__ogiJsonp_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    var script = document.createElement('script');
+    var timeoutId = null;
+    var settled = false;
+
+    function cleanup() {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try {
+        delete window[callbackName];
+      } catch (e) {
+        window[callbackName] = undefined;
+      }
+    }
+
+    window[callbackName] = function(payload) {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(payload || {});
+    };
+
+    timeoutId = setTimeout(function() {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(new Error('Permintaan ke server timeout'));
+    }, 20000);
+
+    script.onerror = function() {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(new Error('Gagal terhubung ke server API'));
+    };
+
+    var requestParams = {};
+    Object.keys(params || {}).forEach(function(key) {
+      requestParams[key] = params[key];
+    });
+    requestParams.callback = callbackName;
+
+    script.src = buildApiUrl(action, requestParams);
+    script.async = true;
+    document.head.appendChild(script);
+  });
+}
+
 function fetchApiGet(action, params) {
-  return fetch(buildApiUrl(action, params || {}), { method: 'GET' }).then(parseApiJsonResponse);
+  return createJsonpRequest(action, params || {});
 }
 
 function fetchApiPost(action, data) {
-  return fetch(buildApiUrl(action), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data || {})
-  }).then(parseApiJsonResponse);
+  return createJsonpRequest(action, {
+    payload: JSON.stringify(data || {})
+  });
 }
 
 function getTransportMode() {
